@@ -1,12 +1,165 @@
 ﻿<Window x:Class="Fiszki.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fiszki"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="200" Width="400">
 
+    <Grid Name="mainGrid">
+        <Grid Name="menu" Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button Name="startButton" Height="30" Width="180" Click="startButton_Click">Rozpocznij</Button>
+            <Button Name="settingsButton" Grid.Row="1" Height="30" Width="180" Click="settingsButton_Click">Opcje</Button>
+            <Button Name="highScoreButton" Grid.Row="2" Height="30" Width="180" Click="highScoreButton_Click">Najlepsze wyniki</Button>
+            <Button Name="quitButton" Grid.Row="3" Height="30" Width="180" Click="quitButton_Click">Wyjście</Button>
+        </Grid>
+
+
+        <Grid Name="settings" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5">Poziom trudności:</Label>
+            <Label Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5">Wersja kolorystyczna</Label>
+            <Slider Name="difficultSetter" Grid.Column="1" VerticalAlignment="Center" Margin="5" IsSnapToTickEnabled="True" 
+                    ValueChanged="Difficult_ValueChanged" Maximum="2"></Slider>
+            <ComboBox Name="colorSetter" Grid.Row="1" Grid.Column="1" Margin="10" SelectionChanged="colorSetter_SelectionChanged"></ComboBox>
+            <Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5">Sprawdzanie polskich znaków:</Label>
+            <Button Grid.Column="1" Grid.Row="3" Margin="10" Height="20" Width="70" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                    Click="BackButton_Click">wróć</Button>
+            <CheckBox Name="diacriticalMarksCheck" Grid.Row="2" Grid.Column="1" Margin="10" VerticalAlignment="Center" Checked="diacriticalMarksCheck_Checked"></CheckBox>
+        </Grid>
+
+
+        <Grid Name="start" Visibility="Hidden">
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <Label VerticalAlignment="Center" HorizontalAlignment="Center">Wybierz tryb:</Label>
+            <Grid Name="startInside" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Name="naukaButton" Height="25" Width="100"  Click="Start_Click">Nauka</Button>
+                <Button Name="testButton" Height="25" Width="100" Grid.Column="1" Click="Start_Click">Test</Button>
+            </Grid>
+            <Button Grid.Row="2" Height="20" Width="70" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="10"
+                    Click="BackButton_Click">Wróć</Button>
+        </Grid>
+
+
+        <Grid Name="highscore" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <Label>Najlepsze wyniki</Label>
+            <ListBox Name="highscoreList" Margin="5,0,5,0" Grid.Row="1"></ListBox>
+            <Button Grid.Row="2" Height="20" Width="70" HorizontalAlignment="Right" Margin="5" Click="BackButton_Click">Wroć</Button>
+        </Grid>
+
+
+        <Grid Name="gameEasy" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <Label Name="questionNumEasy">Pytanie 1/15</Label>
+            <Label Name="questionEasy" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">xxx</Label>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Name="answerEasy1" Margin="10"></Button>
+                <Button Name="answerEasy2" Grid.Column="1" Margin="10"></Button>
+                <Button Name="answerEasy3" Grid.Column="2" Margin="10"></Button>
+
+            </Grid>
+            <Button Name="playEasyBackButton" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" Margin="5" Click="BackButton_Click">Wroć</Button>
+        </Grid>
+
+
+        <Grid Name="gameMedium" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <Label Name="questionNumMedium">Pytanie 1/15</Label>
+            <Label Name="questionMedium" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">xxx</Label>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Name="answerMedium1" Margin="5,10,5,10"></Button>
+                <Button Name="answerMedium2" Grid.Column="1" Margin="5,10,5,10"></Button>
+                <Button Name="answerMedium3" Grid.Column="2" Margin="5,10,5,10"></Button>
+                <Button Name="answerMedium4" Grid.Column="3" Margin="5,10,5,10"></Button>
+
+            </Grid>
+            <Button Name="playMediumBackButton" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" Margin="5" Click="BackButton_Click">Wroć</Button>
+        </Grid>
+
+
+        <Grid Name="gameHard" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <Label Name="questionNumHard">Pytanie 1/15</Label>
+            <Label Name="questionHard" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">xxx</Label>
+            <Grid Grid.Row="2">
+                <TextBox Name="answerHard" Margin="40,10,40,10"></TextBox>
+            </Grid>
+            <Button Name="playHardBackButton" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" Margin="5" Click="BackButton_Click">Wroć</Button>
+        </Grid>
+
+        <Grid Name="gameOver" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center">Twój wynik to:</Label>
+            <Label Name="score" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">00/15</Label>
+            <Button Grid.Row="2" Height="20" Width="70" HorizontalAlignment="Center" Margin="5" Click="BackButton_Click">Wroć</Button>
+        </Grid>
     </Grid>
 </Window>
