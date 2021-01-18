@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Fiszki.DAL;
+using Fiszki.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,17 +30,15 @@ namespace Fiszki
         public bool questionsCounting;
 
         private Strategia s;
-
         public MainWindow()
         {
             InitializeComponent();
-
             /* W settings.txt sa 2 wiersze z 0/1
              *      1. wiersz to poziom trudnosci
              *      2. wiersz to wersja kolorystyczna
              * Wrzucam to do pliku, zeby pamietalo ustawienia przy kolejnych wlaczeniach programu.
              */
-
+            WordDatabase df = WordDatabase.GetWordDatabase();
             /*settingsTxt = File.ReadAllText(@"C:\Users\user\source\repos\ztp_projekt_fiszki\ztp_projekt_fiszki\settings\settings.txt");
 
             for (int i = 0; i < 8; i++)
