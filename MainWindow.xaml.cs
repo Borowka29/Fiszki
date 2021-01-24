@@ -22,41 +22,24 @@ namespace Fiszki
     /// </summary>
     public partial class MainWindow : Window
     {
-        private double difficult = 0;
-        private int color = 0;
+        private double difficult = 0;   //trzeba do bazy zapisac
+        public int color = 0;           //trzeba do bazy zapisac
         private string[] colorList = { "szary", "różowy", "niebieski", "zielony", "krejzolski" };
         public string settingsTxt;
-        public bool isDiacriticalSigns;
+        public bool isBold;
         public bool questionsCounting;
+        public WordDatabase df = WordDatabase.GetWordDatabase();
 
-        private Strategia s;
+        private Strategia strategia;
+        public Decorator decorator;
+
+
         public MainWindow()
         {
             InitializeComponent();
-            /* W settings.txt sa 2 wiersze z 0/1
-             *      1. wiersz to poziom trudnosci
-             *      2. wiersz to wersja kolorystyczna
-             * Wrzucam to do pliku, zeby pamietalo ustawienia przy kolejnych wlaczeniach programu.
-             */
-            WordDatabase df = WordDatabase.GetWordDatabase();
-            /*settingsTxt = File.ReadAllText(@"C:\Users\user\source\repos\ztp_projekt_fiszki\ztp_projekt_fiszki\settings\settings.txt");
-
-            for (int i = 0; i < 8; i++)
-                    {
-                        while (i < 3)
-                            if (settingsTxt[i] == '1') difficult = i;
-                        while (i > 2)
-                            if (settingsTxt[i] == '1') color = i - 3;
-                        if (settingsTxt[i] == '1') isDiacriticalSigns = true;
-                    }*/
 
             colorSetter.ItemsSource = colorList;
             colorSetter.SelectedItem = colorList[color];
-        }
-
-        private void playMain()
-        {
-            s.play();
         }
 
         private void Difficult_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -73,6 +56,12 @@ namespace Fiszki
 
         private void colorSetter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            colorChange(this);
+        }
+
+        public void colorChange(MainWindow main)
+        {
+
             /* 1. szary
              * 2. rozowy
              * 3. niebieski
@@ -82,234 +71,31 @@ namespace Fiszki
 
             if (colorSetter.SelectedItem.ToString() == "szary")
             {
-                color = 0;
-                foreach (Grid item in this.mainGrid.Children.OfType<Grid>())
-                {
-                    item.Background = Brushes.White;
-                }
-                foreach (Button item in this.menu.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
-                foreach (Button item in this.highscore.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
-                foreach (Button item in this.start.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
-                foreach (Button item in this.settings.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
-                foreach (Button item in this.gameOver.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
-                foreach (Button item in this.gameEasy.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
-                foreach (Button item in this.gameMedium.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
-                foreach (Button item in this.gameHard.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
-                foreach (Button item in this.startInside.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.LightGray;
-                }
+                decorator = new GrayDecorator();
+                decorator.changeColor(main);
             }
             else if (colorSetter.SelectedItem.ToString() == "różowy")
             {
-                color = 1;
-                foreach (Grid item in this.mainGrid.Children.OfType<Grid>())
-                {
-                    item.Background = Brushes.Pink;
-                }
-                foreach (Button item in this.menu.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
-                foreach (Button item in this.highscore.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
-                foreach (Button item in this.start.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
-                foreach (Button item in this.settings.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
-                foreach (Button item in this.gameOver.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
-                foreach (Button item in this.gameEasy.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
-                foreach (Button item in this.gameMedium.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
-                foreach (Button item in this.gameHard.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
-                foreach (Button item in this.startInside.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.HotPink;
-                }
+                decorator = new PinkDecorator();
+                decorator.changeColor(main);
             }
             else if (colorSetter.SelectedItem.ToString() == "niebieski")
             {
-                color = 2;
-                foreach (Grid item in this.mainGrid.Children.OfType<Grid>())
-                {
-                    item.Background = Brushes.LightBlue;
-                }
-                foreach (Button item in this.menu.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
-                foreach (Button item in this.highscore.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
-                foreach (Button item in this.start.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
-                foreach (Button item in this.settings.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
-                foreach (Button item in this.gameOver.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
-                foreach (Button item in this.gameEasy.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
-                foreach (Button item in this.gameMedium.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
-                foreach (Button item in this.gameHard.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
-                foreach (Button item in this.startInside.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Azure;
-                }
+                decorator = new BlueDecorator();
+                decorator.changeColor(main);
             }
             else if (colorSetter.SelectedItem.ToString() == "zielony")
             {
-                color = 3;
-                foreach (Grid item in this.mainGrid.Children.OfType<Grid>())
-                {
-                    item.Background = Brushes.LightGreen;
-                }
-                foreach (Button item in this.menu.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
-                foreach (Button item in this.highscore.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
-                foreach (Button item in this.start.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
-                foreach (Button item in this.settings.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
-                foreach (Button item in this.gameOver.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
-                foreach (Button item in this.gameEasy.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
-                foreach (Button item in this.gameMedium.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
-                foreach (Button item in this.gameHard.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
-                foreach (Button item in this.startInside.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Lime;
-                }
+                decorator = new GreenDecorator();
+                decorator.changeColor(main);
             }
             else if (colorSetter.SelectedItem.ToString() == "krejzolski")
             {
-                color = 4;
-                foreach (Grid item in this.mainGrid.Children.OfType<Grid>())
-                {
-                    item.Background = Brushes.Red;
-                }
-                foreach (Button item in this.menu.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
-                foreach (Button item in this.highscore.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
-                foreach (Button item in this.start.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
-                foreach (Button item in this.settings.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
-                foreach (Button item in this.gameOver.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
-                foreach (Button item in this.gameEasy.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
-                foreach (Button item in this.gameMedium.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
-                foreach (Button item in this.gameHard.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
-                foreach (Button item in this.startInside.Children.OfType<Button>())
-                {
-                    item.Background = Brushes.Blue;
-                }
+                decorator = new UglyDecorator();
+                decorator.changeColor(main);
             }
 
             // JESZCZE TRZEBA ZMIENIC W PLIKU
-        }
-
-        private void diacriticalMarksCheck_Checked(object sender, RoutedEventArgs e)
-        {
-            if (isDiacriticalSigns)
-                isDiacriticalSigns = false;
-            else
-                isDiacriticalSigns = true;
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -319,6 +105,10 @@ namespace Fiszki
             settings.Visibility = Visibility.Hidden;
             gameOver.Visibility = Visibility.Hidden;
             start.Visibility = Visibility.Hidden;
+
+            gameEasy.Visibility = Visibility.Hidden;
+            gameMedium.Visibility = Visibility.Hidden;
+            gameHard.Visibility = Visibility.Hidden;
         }
 
         private void startButton_Click(object sender, RoutedEventArgs e)
@@ -347,29 +137,89 @@ namespace Fiszki
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             if (sender == naukaButton)
-                questionsCounting = true;
-            else
+            {
                 questionsCounting = false;
+                questionNumEasy.Visibility = Visibility.Hidden;
+                questionNumMedium.Visibility = Visibility.Hidden;
+                questionNumHard.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                questionsCounting = true;
+                questionNumEasy.Visibility = Visibility.Visible;
+                questionNumMedium.Visibility = Visibility.Visible;
+                questionNumHard.Visibility = Visibility.Visible;
+            }
 
             switch (difficult)
             {
                 case 0:
-                    this.s = new Easy();
-                    gameEasy.Visibility = Visibility.Visible;
+                    this.strategia = new Easy();
                     break;
 
                 case 1:
-                    this.s = new Medium();
-                    gameMedium.Visibility = Visibility.Visible;
+                    this.strategia = new Medium();
                     break;
 
                 case 2:
-                    this.s = new Hard();
-                    gameHard.Visibility = Visibility.Visible;
+                    this.strategia = new Hard();
                     break;
             }
 
-            s.play();
+            start.Visibility = Visibility.Hidden;
+            strategia.play(this);
+        }
+
+        private void answer_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (playEasyNextButton.Visibility == Visibility.Hidden)
+            {
+                if (sender == answerEasy1)
+                    strategia.check("e1", this);
+                else if (sender == answerEasy2)
+                    strategia.check("e2", this);
+                else if (sender == answerEasy3)
+                    strategia.check("e3", this);
+                else if (sender == answerMedium1)
+                    strategia.check("m1", this);
+                else if (sender == answerMedium2)
+                    strategia.check("m2", this);
+                else if (sender == answerMedium3)
+                    strategia.check("m3", this);
+                else if (sender == answerMedium4)
+                    strategia.check("m4", this);
+                else if (sender == answerHard)
+                    strategia.check("h", this);
+            }
+
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (sender == playEasyNextButton)
+                playEasyNextButton.Visibility = Visibility.Hidden;
+            else if (sender == playMediumNextButton)
+                playMediumNextButton.Visibility = Visibility.Hidden;
+            else if (sender == playMediumNextButton)
+            {
+                playHardNextButton.Visibility = Visibility.Hidden;
+                nextHard.Visibility = Visibility.Visible;
+            }
+
+            strategia.play(this);
+        }
+
+        private void boldCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            decorator = new BoldDecorator();
+            decorator.changeColor(this);
+        }
+
+        private void boldCheck_Unchecked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
