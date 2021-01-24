@@ -17,11 +17,8 @@ using System.Windows.Shapes;
 
 namespace Fiszki
 {
-    abstract public class Strategia
+    public abstract class Decorator : Window
     {
-        //public int correctIndex;
-        public abstract void play(MainWindow main);
-        public abstract void check(string answer, MainWindow main);
+        public abstract void changeColor(MainWindow main);
     }
-
 }

@@ -26,7 +26,6 @@ namespace Fiszki
         }
         public void EditWord(int id, string pol, string eng)
         {
-            //Word newWord = words.Where(z => z.IdWord == id).FirstOrDefault();
             words.Where(z => z.IdWord == id).FirstOrDefault().PolishVersion=pol;
             words.Where(z => z.IdWord == id).FirstOrDefault().EnglishVersion = eng;
         }
