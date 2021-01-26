@@ -7,9 +7,40 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="200" Width="400">
 
-    <Grid Name="mainGrid">
+    
+    <Grid Name="mainGrid" >
 
-        <Grid Name="menu" Visibility="Visible">
+        <Grid Name="Login" >
+            <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+
+                <Label Margin="0, 2,0,2">Login:</Label>
+                <TextBox Name="userLogin" Padding="3"></TextBox>
+
+                <Label Margin="0, 2">Hasło:</Label>
+                <PasswordBox Name="userPassword" Padding="3"></PasswordBox>
+
+                <Button Click="Zaloguj_Click" Margin="0, 10,0,1" Padding="2" IsDefault="True">Zaloguj</Button>
+                <Button Click="Rejestracja_Click" Margin="0, 2,0,4" Padding="2" IsDefault="True">Rejestracja</Button>
+                
+                
+                <Label Name="Wynik" Visibility="Collapsed" Foreground="Red"></Label>
+            </StackPanel>
+        </Grid>
+        <Grid Name="Rejestracja" Visibility="Hidden">
+            <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+
+                <Label Margin="0, 5">Login:</Label>
+                <TextBox Name="userLoginR" Padding="5"></TextBox>
+
+                <Label Margin="0, 5">Hasło:</Label>
+                <PasswordBox Name="userPasswordR" Padding="5"></PasswordBox>
+
+                <Button Click="RejestracjaOK_Click" Margin="0, 10" Padding="5" IsDefault="True">Utwórz konto</Button>
+
+                <Label Name="WynikR" Visibility="Collapsed" Foreground="Red"></Label>
+            </StackPanel>
+        </Grid>
+        <Grid Name="menu" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -19,11 +50,12 @@
 
             <Button Name="startButton" Height="30" Width="180" Click="startButton_Click">Rozpocznij</Button>
             <Button Name="settingsButton" Grid.Row="1" Height="30" Width="180" Click="settingsButton_Click">Opcje</Button>
-            <Button Name="highScoreButton" Grid.Row="2" Height="30" Width="180" Click="highScoreButton_Click">Najlepsze wyniki</Button>
+            <Button Name="changeLanguage" Grid.Row="2" Height="30" Width="180" Click="changeLanguage_Click">Zmień język</Button>
             <Button Name="quitButton" Grid.Row="3" Height="30" Width="180" Click="quitButton_Click">Wyjście</Button>
         </Grid>
 
-
+        
+        
         <Grid Name="settings" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -70,7 +102,7 @@
         </Grid>
 
 
-        <Grid Name="highscore" Visibility="Hidden">
+        <Grid Name="ChangeYourLanguage" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition/>

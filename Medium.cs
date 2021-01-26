@@ -21,26 +21,32 @@ namespace Fiszki
     {
         public string question;
         public string correctAnswer;
-        public string[] wrongAnswer = { "", "", "" };
+        public string[] wrongAnswer = new string[3];
+        public int ktore { get; set; }
+        private int[] indexy;
+        private Random rand { get; set; } = new Random();
         public int correctIndex;
         public bool point;
 
-        override public void play(MainWindow main)
+        override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
-            this.question = readQuestion(0);
-            this.correctAnswer = readAnswer(0);
-            this.wrongAnswer[0] = readAnswer(1);
-            this.wrongAnswer[1] = readAnswer(2);
-            this.wrongAnswer[2] = readAnswer(3);
+            ktore = ktorePytanie;
+            this.question = tabWords[ktore].PolishVersion;
+            this.correctAnswer = tabWords[ktore].EnglishVersion;
+
+            losuj();
+            this.wrongAnswer[0] = tabWords[indexy[0]].EnglishVersion;
+            this.wrongAnswer[1] = tabWords[indexy[1]].EnglishVersion;
+            this.wrongAnswer[2] = tabWords[indexy[2]].EnglishVersion;
 
             main.gameMedium.Visibility = Visibility.Visible;
             main.playMediumNextButton.Visibility = Visibility.Hidden;
             main.colorChange(main);
 
+            main.questionEasy.Content = question;
             main.questionMedium.Content = question;
 
-            Random rand = new Random();
-            correctIndex = rand.Next(3);
+            correctIndex = rand.Next(4);
 
             if (correctIndex == 0)
             {
@@ -78,8 +84,19 @@ namespace Fiszki
                 main.answerMedium3.Content = wrongAnswer[2];
             }
 
+            point = false;
         }
-
+        public void losuj()
+        {
+            indexy = new int[3];
+            do
+            {
+                indexy[0] = this.rand.Next(0, 4);
+                indexy[1] = this.rand.Next(0, 4);
+                indexy[2] = this.rand.Next(0, 4);
+            } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore|| indexy[2]== indexy[1]|| indexy[2]== indexy[0]|| indexy[2]==ktore);
+        }
+        
         public override void check(string answer, MainWindow main)
         {
             main.answerMedium1.Background = Brushes.Red;
@@ -113,20 +130,6 @@ namespace Fiszki
             }
 
             main.playMediumNextButton.Visibility = Visibility.Visible;
-        }
-
-        public string readQuestion(int index)
-        {
-            string q;
-            // <--- zczytanie pytania z pliku
-            return "trzeba ustawic";
-        }
-
-        public string readAnswer(int index)
-        {
-            string a;
-            // <--- zczytanie odpowiedzi z pliku
-            return "trzeba ustawic";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Fiszki.DAL;
 using Fiszki.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,24 +23,27 @@ namespace Fiszki
     /// </summary>
     public partial class MainWindow : Window
     {
-        private double difficult = 0;   //trzeba do bazy zapisac
-        public int color = 0;           //trzeba do bazy zapisac
+        private double difficult { get; set; }
+        public int color { get; set; } 
         private string[] colorList = { "szary", "różowy", "niebieski", "zielony", "krejzolski" };
-        public string settingsTxt;
-        public bool isBold;
-        public bool questionsCounting;
-        public WordDatabase df = WordDatabase.GetWordDatabase();
-
-        private Strategia strategia;
+        public bool isBold { get; set; }
+        private Baza Baza { get; set; }
+        public Account User { get; set; }
+        private static LearningMode learningMode { get; set; }
+        private static TestMode testMode { get; set; }
         public Decorator decorator;
 
 
         public MainWindow()
         {
             InitializeComponent();
-
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             colorSetter.ItemsSource = colorList;
-            colorSetter.SelectedItem = colorList[color];
+            Login.Visibility = Visibility.Visible;
+            learningMode = new LearningMode();
+            testMode = new TestMode();
+            //colorSetter.SelectedItem = colorList[color];
+            Baza = Baza.GetInstance();
         }
 
         private void Difficult_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -50,8 +54,6 @@ namespace Fiszki
              */
 
             difficult = difficultSetter.Value;
-
-            // JESZCZE TRZEBA ZMIENIC W PLIKU
         }
 
         private void colorSetter_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -95,7 +97,6 @@ namespace Fiszki
                 decorator.changeColor(main);
             }
 
-            // JESZCZE TRZEBA ZMIENIC W PLIKU
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -131,21 +132,27 @@ namespace Fiszki
 
         private void quitButton_Click(object sender, RoutedEventArgs e)
         {
+            Baza.updateDataUser(User.Id, difficult, color, isBold);
+            //User.LevelHard = difficult;
+            //User.Color = color;
+            //User.IsBold =isBold;
+            //db.Attach(User).State = EntityState.Modified;
+            //db.SaveChanges();
             Close();
         }
-
+        private int tryb;
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             if (sender == naukaButton)
             {
-                questionsCounting = false;
+                tryb = 1;
                 questionNumEasy.Visibility = Visibility.Hidden;
                 questionNumMedium.Visibility = Visibility.Hidden;
                 questionNumHard.Visibility = Visibility.Hidden;
             }
             else
             {
-                questionsCounting = true;
+                tryb = 2;
                 questionNumEasy.Visibility = Visibility.Visible;
                 questionNumMedium.Visibility = Visibility.Visible;
                 questionNumHard.Visibility = Visibility.Visible;
@@ -154,20 +161,23 @@ namespace Fiszki
             switch (difficult)
             {
                 case 0:
-                    this.strategia = new Easy();
+                    if(tryb==1)  learningMode.setStrategia(new Easy(),Baza.getListWord());
+                    else testMode.setStrategia(new Easy(), Baza.getListWord());
                     break;
 
                 case 1:
-                    this.strategia = new Medium();
+                    if (tryb == 1) learningMode.setStrategia(new Medium(), Baza.getListWord());
+                    else testMode.setStrategia(new Medium(), Baza.getListWord());
                     break;
 
                 case 2:
-                    this.strategia = new Hard();
+                    if (tryb == 1) learningMode.setStrategia(new Hard(), Baza.getListWord());
+                    else testMode.setStrategia(new Hard(), Baza.getListWord());
                     break;
             }
 
             start.Visibility = Visibility.Hidden;
-            strategia.play(this);
+            learningMode.DrowACard(this);
         }
 
         private void answer_Click(object sender, RoutedEventArgs e)
@@ -176,21 +186,21 @@ namespace Fiszki
             if (playEasyNextButton.Visibility == Visibility.Hidden)
             {
                 if (sender == answerEasy1)
-                    strategia.check("e1", this);
+                    learningMode.check("e1", this);
                 else if (sender == answerEasy2)
-                    strategia.check("e2", this);
+                    learningMode.check("e2", this);
                 else if (sender == answerEasy3)
-                    strategia.check("e3", this);
+                    learningMode.check("e3", this);
                 else if (sender == answerMedium1)
-                    strategia.check("m1", this);
+                    learningMode.check("m1", this);
                 else if (sender == answerMedium2)
-                    strategia.check("m2", this);
+                    learningMode.check("m2", this);
                 else if (sender == answerMedium3)
-                    strategia.check("m3", this);
+                    learningMode.check("m3", this);
                 else if (sender == answerMedium4)
-                    strategia.check("m4", this);
+                    learningMode.check("m4", this);
                 else if (sender == answerHard)
-                    strategia.check("h", this);
+                    learningMode.check("h", this);
             }
 
         }
@@ -207,8 +217,11 @@ namespace Fiszki
                 playHardNextButton.Visibility = Visibility.Hidden;
                 nextHard.Visibility = Visibility.Visible;
             }
+            if(tryb==1 && learningMode.którePytanie<4)
+            {
+                learningMode.DrowACard(this);
 
-            strategia.play(this);
+            }
         }
 
         private void boldCheck_Checked(object sender, RoutedEventArgs e)
@@ -220,6 +233,86 @@ namespace Fiszki
         private void boldCheck_Unchecked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Zaloguj_Click(object sender, RoutedEventArgs e)
+        {
+            userLogin.ClearValue(TextBox.BorderBrushProperty);
+            userPassword.ClearValue(TextBox.BorderBrushProperty);
+            string login = userLogin.Text;
+
+            if (login=="")
+            {
+                userLogin.BorderBrush = Brushes.Red;
+
+                return;
+            }
+            string password = userPassword.Password.ToString();
+            
+            User = Baza.getUserData(login);//db.Account.Where(p => p.Username == login).FirstOrDefault();
+
+            if (User != null)
+            {
+
+                if (User.Password == password)
+                {
+                    Login.Visibility = Visibility.Collapsed;
+                    menu.Visibility = Visibility.Visible;
+                    difficult = User.LevelHard;
+                    isBold = User.IsBold;
+                    color = User.Color;
+                    userLogin.Text = "";
+                    userPassword.Password = "";
+                    return;
+                }
+
+                userPassword.BorderBrush = Brushes.Red;
+                return;
+            }
+            Wynik.Content = "Podany użytkownik nie istnieje!";
+            Wynik.Visibility = Visibility.Visible;
+            return;
+        }
+
+        private void Rejestracja_Click(object sender, RoutedEventArgs e)
+        {
+            Login.Visibility = Visibility.Collapsed;
+            Rejestracja.Visibility = Visibility.Visible;
+        }
+
+        private void RejestracjaOK_Click(object sender, RoutedEventArgs e)
+        {
+            bool udałoSie = false;
+            Account NewUser = new Account();
+            string password = userPasswordR.Password.ToString();
+            if (userLoginR.Text!="" && password != "")
+            {
+                udałoSie= Baza.createNewUser(userLoginR.Text, password);
+                //NewUser.Username = userLoginR.Text;
+                //NewUser.Password = password;
+                //NewUser.LevelHard = 1;
+                //NewUser.Color = 1;
+                //NewUser.IsBold = false;
+                //db.Account.Add(NewUser);
+                //db.SaveChanges();
+
+            }
+            else
+            {
+                WynikR.Content = "Nie wypełniłeś danych!";
+                WynikR.Visibility = Visibility.Visible;
+            }
+            if (udałoSie == true)
+            {
+                colorSetter.SelectedItem = colorList[color];
+                Rejestracja.Visibility = Visibility.Collapsed;
+                Login.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                WynikR.Content = "Login jest już zajęty!";
+                WynikR.Visibility = Visibility.Visible;
+            }
         }
     }
 }

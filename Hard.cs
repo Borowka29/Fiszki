@@ -22,12 +22,14 @@ namespace Fiszki
     {
         public string question;
         public string correctAnswer;
+        public int ktore { get; set; }
         public bool point;
 
-        override public void play(MainWindow main)
+        override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
-            this.question = readQuestion(0);
-            this.correctAnswer = readAnswer(0);
+            ktore = ktorePytanie;
+            this.question = tabWords[ktore].PolishVersion;
+            this.correctAnswer = tabWords[ktore].EnglishVersion;
 
             main.gameHard.Visibility = Visibility.Visible;
             main.playHardNextButton.Visibility = Visibility.Hidden;
@@ -56,20 +58,6 @@ namespace Fiszki
 
             main.nextHard.Visibility = Visibility.Hidden;
             main.playHardNextButton.Visibility = Visibility.Visible;
-        }
-
-        public string readQuestion(int index)
-        {
-            string q;
-            // <--- zczytanie pytania z pliku
-            return "trzeba ustawic";
-        }
-
-        public string readAnswer(int index)
-        {
-            string a;
-            // <--- zczytanie odpowiedzi z pliku
-            return "trzeba ustawic";
         }
     }
 }

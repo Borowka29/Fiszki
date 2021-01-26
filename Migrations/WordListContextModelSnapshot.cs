@@ -18,9 +18,36 @@ namespace Fiszki.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
+            modelBuilder.Entity("Fiszki.Models.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("Color")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsBold")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("LevelHard")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Account");
+                });
+
             modelBuilder.Entity("Fiszki.Models.Word", b =>
                 {
-                    b.Property<int>("IdWord")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -31,7 +58,7 @@ namespace Fiszki.Migrations
                     b.Property<string>("PolishVersion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdWord");
+                    b.HasKey("Id");
 
                     b.ToTable("Word");
                 });

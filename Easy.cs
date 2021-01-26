@@ -21,30 +21,30 @@ namespace Fiszki
     {
         public string question;
         public string correctAnswer;
-        public string[] wrongAnswer = { "", "" };
+        public string[] wrongAnswer =new string[2];
+        public int ktore { get; set; }
+        private int[] indexy;
+        private Random rand { get; set; } = new Random();
         public int correctIndex;
         public bool point;
 
-        override public void play(MainWindow main)
+        override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
-            this.question = readQuestion(0);
-            this.correctAnswer = readAnswer(0);
-            this.wrongAnswer[0] = readAnswer(1);
-            this.wrongAnswer[1] = readAnswer(2);
+            ktore = ktorePytanie;
+            this.question = tabWords[ktore].PolishVersion;
+            this.correctAnswer = tabWords[ktore].EnglishVersion;
 
-            main.gameEasy.Visibility = Visibility.Visible;
-            main.playEasyNextButton.Visibility = Visibility.Hidden;
-            main.colorChange(main);
+            losuj();
+            this.wrongAnswer[0] = tabWords[indexy[0]].EnglishVersion;
+            this.wrongAnswer[1] = tabWords[indexy[1]].EnglishVersion;
 
-            main.questionMedium.Content = question;
+            main.questionEasy.Content = question;
 
-            Random rand = new Random();
             correctIndex = rand.Next(3);
 
             if (correctIndex == 0)
             {
                 main.answerEasy1.Content = correctAnswer;
-
                 main.answerEasy2.Content = wrongAnswer[0];
                 main.answerEasy3.Content = wrongAnswer[1];
             }
@@ -52,7 +52,6 @@ namespace Fiszki
             else if (correctIndex == 1)
             {
                 main.answerEasy2.Content = correctAnswer;
-
                 main.answerEasy1.Content = wrongAnswer[0];
                 main.answerEasy3.Content = wrongAnswer[1];
             }
@@ -60,56 +59,42 @@ namespace Fiszki
             else if (correctIndex == 2)
             {
                 main.answerEasy3.Content = correctAnswer;
-
                 main.answerEasy1.Content = wrongAnswer[0];
                 main.answerEasy2.Content = wrongAnswer[1];
             }
 
             point = false;
         }
+        public void losuj()
+        {
+            indexy = new int[2];
+            do
+            {
+                indexy[0]=this.rand.Next(0, 4);
+                indexy[1] = this.rand.Next(0, 4);
 
+            } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore); 
+        }
+        //
         public override void check(string answer, MainWindow main)
         {
-            main.answerEasy1.Background = Brushes.Red;
-            main.answerEasy2.Background = Brushes.Red;
-            main.answerEasy3.Background = Brushes.Red;
-
             if (correctIndex == 0)
             {
-                main.answerEasy1.Background = Brushes.LightGreen;
                 if (answer == "e1")
                     point = true;
             }
-
             else if (correctIndex == 1)
             {
-                main.answerEasy2.Background = Brushes.LightGreen;
                 if (answer == "e2")
                     point = true;
             }
             else if (correctIndex == 2)
             {
-                main.answerEasy3.Background = Brushes.LightGreen;
                 if (answer == "e3")
                     point = true;
             }
+            //main.playEasyNextButton.Visibility = Visibility.Visible;
 
-            main.playEasyNextButton.Visibility = Visibility.Visible;
-
-        }
-
-        public string readQuestion(int index)
-        {
-            string q;
-            // <--- zczytanie pytania z pliku
-            return "trzeba ustawic";
-        }
-
-        public string readAnswer(int index)
-        {
-            string a;
-            // <--- zczytanie odpowiedzi z pliku
-            return "trzeba ustawic";
         }
     }
 }

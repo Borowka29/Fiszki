@@ -17,10 +17,10 @@ using System.Windows.Shapes;
 
 namespace Fiszki
 {
-    abstract public class Strategia
+    public abstract class Strategia
     {
         //public int correctIndex;
-        public abstract void play(MainWindow main);
+        public abstract void play(MainWindow main, Word[] tabWords, int ktorePytanie);
         public abstract void check(string answer, MainWindow main);
     }
 
