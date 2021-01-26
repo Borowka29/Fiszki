@@ -50,7 +50,7 @@
 
             <Button Name="startButton" Height="30" Width="180" Click="startButton_Click">Rozpocznij</Button>
             <Button Name="settingsButton" Grid.Row="1" Height="30" Width="180" Click="settingsButton_Click">Opcje</Button>
-            <Button Name="changeLanguage" Grid.Row="2" Height="30" Width="180" Click="changeLanguage_Click">Zmień język</Button>
+            <Button Name="highScoreButton" Grid.Row="2" Height="30" Width="180" Click="highScoreButton_Click">Najlepsze wyniki</Button>
             <Button Name="quitButton" Grid.Row="3" Height="30" Width="180" Click="quitButton_Click">Wyjście</Button>
         </Grid>
 
@@ -102,7 +102,7 @@
         </Grid>
 
 
-        <Grid Name="ChangeYourLanguage" Visibility="Hidden">
+        <Grid Name="highscore" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition/>
