@@ -79,17 +79,35 @@ namespace Fiszki
             userAnswer = answer;
 
             if (main.tryb == 2 && ktore > 0)
+            {
                 main.previousQuestionHard.Visibility = Visibility.Visible;
-            if (ktore == 9)
-            {
-                main.playHardNextButton.Content = "Koniec";
-                end = true;
+
+                if (ktore == 9)
+                {
+                    main.playHardNextButton.Content = "Koniec";
+                    end = true;
+                }
+                else
+                {
+                    main.playHardNextButton.Content = "Dalej";
+                    end = false;
+                }
             }
-            else
-            {
-                main.playHardNextButton.Content = "Dalej";
-                end = false;
-            }
+            else if (main.tryb == 1)
+                if (point == true)
+                {
+                    if (point == true)
+                        main.playHardNextButton.Visibility = Visibility.Visible;
+                    else
+                        main.playHardNextButton.Visibility = Visibility.Hidden;
+
+                    if (ktore == 5)
+                    {
+                        main.learningOver.Visibility = Visibility.Visible;
+                        main.gameHard.Visibility = Visibility.Hidden;
+                    }
+                }
+
         }
 
         public override Answer GetQuestion()

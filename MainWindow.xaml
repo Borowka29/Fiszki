@@ -300,5 +300,9 @@
             <Label Name="score" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">00/15</Label>
             <Button Grid.Row="2" Height="20" Width="70" HorizontalAlignment="Center" Margin="5" Click="BackButton_Click">Wroć</Button>
         </Grid>
+        <Grid Name="learningOver" Visibility="Hidden">
+            <Label FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center">Gratulacje!</Label>
+            <Button Width="70" Height="25" Margin="20" VerticalAlignment="Bottom" Click="BackButton_Click">wróć</Button>
+        </Grid>
     </Grid>
 </Window>

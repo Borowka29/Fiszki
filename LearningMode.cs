@@ -17,10 +17,10 @@ namespace Fiszki
             rand = new Random();
             int ile = rand.Next(1, 2);
             int k = ile;
-            tabWords = new Word[4];
+            tabWords = new Word[5];
             LeveOfDifficulty = strategia;
 
-            for(int i = 0; i < 4; i++)
+            for(int i = 0; i < 5; i++)
             {
                 tabWords[i] = words[k];
                 k = k + ile;
@@ -30,11 +30,18 @@ namespace Fiszki
         }
         public void DrowACard(MainWindow main)
         {
-            main.gameEasy.Visibility = Visibility.Visible;
-            main.playEasyNextButton.Visibility = Visibility.Hidden;
-            main.colorChange();
+            if (którePytanie < tabWords.Length)
+            {
+
             this.LeveOfDifficulty.play(main, tabWords,którePytanie);
             którePytanie++;
+            }
+            else
+            {
+
+                main.learningOver.Visibility = Visibility.Visible;
+                main.gameMedium.Visibility = Visibility.Hidden;
+            }
         }
         public void check(string answer, MainWindow main)
         {

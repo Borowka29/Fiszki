@@ -117,37 +117,68 @@ namespace Fiszki
             {
                 if (answer == "m1")
                     point = true;
+                else
+                    point = false;
             }
             else if (correctIndex == 1)
             {
                 if (answer == "m2")
                     point = true;
+                else
+                    point = false;
             }
             else if (correctIndex == 2)
             {
                 if (answer == "m3")
                     point = true;
+                else
+                    point = false;
             }
             else if (correctIndex == 3)
             {
                 if (answer == "m4")
                     point = true;
+                else
+                    point = false;
             }
             userAnswer = answer;
 
                 main.playMediumNextButton.Visibility = Visibility.Visible;
+
             if (main.tryb == 2 && ktore > 0)
+            {
                 main.previousQuestionMedium.Visibility = Visibility.Visible;
-            if (ktore == 9)
-            {
-                main.playMediumNextButton.Content = "Koniec";
-                end = true;
+
+                if (ktore == 9)
+                {
+                    main.playMediumNextButton.Content = "Koniec";
+                    end = true;
+                }
+                else
+                {
+                    main.playMediumNextButton.Content = "Dalej";
+                    end = false;
+                }
             }
-            else
+
+            else if (main.tryb == 1)
             {
-                main.playMediumNextButton.Content = "Dalej";
-                end = false;
+                if (point == true)
+                {
+                    main.playMediumNextButton.Visibility = Visibility.Visible;
+
+                    if (ktore == 3)
+                    {
+                        main.learningOver.Visibility = Visibility.Visible;
+                        main.gameMedium.Visibility = Visibility.Hidden;
+                    }
+                }
+                else
+                    main.playMediumNextButton.Visibility = Visibility.Hidden;
+
+                
             }
+
         }
 
         public override Answer GetQuestion()
@@ -156,7 +187,7 @@ namespace Fiszki
         }
         override public void ShowQuestion(MainWindow main, Answer ans, int ktorePytanie)
         {
-            ktore = ktorePytanie;
+            //ktore = ktorePytanie;
 
             this.question = ans.Question;
             this.correctAnswer = ans.CorrectAnswer;
@@ -205,7 +236,7 @@ namespace Fiszki
                 main.answerMedium2.Content = ans.AdditionalAnswers[1];
                 main.answerMedium3.Content = ans.AdditionalAnswers[2];
             }
-
+            /*
             //ans.UserAnswer - zaznaczyć button 
             main.answerMedium1.Background = Brushes.White;
             main.answerMedium2.Background = Brushes.White;
@@ -219,6 +250,7 @@ namespace Fiszki
                 main.answerMedium3.Background = Brushes.Blue;
             else if (ans.UserAnswer == "m4")
                 main.answerMedium4.Background = Brushes.Blue;
+            */
 
             point = false;
         }

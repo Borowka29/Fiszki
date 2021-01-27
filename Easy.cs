@@ -113,17 +113,34 @@ namespace Fiszki
 
             main.playEasyNextButton.Visibility = Visibility.Visible;
             if (main.tryb == 2 && ktore > 0)
+            {
                 main.previousQuestionEasy.Visibility = Visibility.Visible;
-            if (ktore == 9)
-            {
-                main.playEasyNextButton.Content = "Koniec";
-                end = true;
+
+                if (ktore == 9)
+                {
+                    main.playEasyNextButton.Content = "Koniec";
+                    end = true;
+                }
+                else
+                {
+                    main.playEasyNextButton.Content = "Dalej";
+                    end = false;
+                }
             }
-            else
-            {
-                main.playEasyNextButton.Content = "Dalej";
-                end = false;
-            }
+            else if(main.tryb==1)
+                {
+                    if (point)
+                        main.playMediumNextButton.Visibility = Visibility.Visible;
+                    else
+                        main.playMediumNextButton.Visibility = Visibility.Hidden;
+
+                    if (ktore == 5)
+                    {
+                        main.learningOver.Visibility = Visibility.Visible;
+                        main.gameEasy.Visibility = Visibility.Hidden;
+                    }
+                }
+
         }
 
         public override Answer GetQuestion()

@@ -118,6 +118,7 @@ namespace Fiszki
             settings.Visibility = Visibility.Hidden;
             gameOver.Visibility = Visibility.Hidden;
             start.Visibility = Visibility.Hidden;
+            learningOver.Visibility = Visibility.Hidden;
 
             gameEasy.Visibility = Visibility.Hidden;
             gameMedium.Visibility = Visibility.Hidden;
@@ -256,7 +257,7 @@ namespace Fiszki
             if (tryb == 2)
             {
                 testMode.DrowACard(this);
-
+                testMode.ZapiszStan();
             }
         }
 

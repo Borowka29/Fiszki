@@ -47,7 +47,7 @@ namespace Fiszki
                 this.LeveOfDifficulty.check(answer, main);
                 end = LeveOfDifficulty.end;
                 Odp = this.LeveOfDifficulty.GetQuestion();
-                this.ZapiszStan();
+              //  this.ZapiszStan();
 
             }
             else//przechodzi do pytania po cofaniu się
@@ -57,10 +57,6 @@ namespace Fiszki
                 this.LeveOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
             }
 
-        }
-        public void NextQuestion()
-        {
-            this.ZapiszStan();
         }
 
         public void ZapiszStan()
@@ -76,12 +72,10 @@ namespace Fiszki
                 Originator.SetSnapshot(Historia[Current]);
                 Current--;
             }
-            /*
-             * ogólnie działa ale nie wiem jak dodać przycisk żeby cofać
-             * i jak potem zmienić żeby dało się zmieniać odpowiedzi
-             * i żeby znowu pojawiał się przycisk dalej
-             */
-            this.LeveOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
+
+
+            którePytanie--;
+            this.LeveOfDifficulty.play(main, tabWords, Current);
         }
 
     }
