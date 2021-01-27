@@ -28,6 +28,10 @@ namespace Fiszki
 
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
+            main.gameHard.Visibility = Visibility.Visible;
+            main.playHardNextButton.Visibility = Visibility.Hidden;
+            main.previousQuestionHard.Visibility = Visibility.Hidden;
+
             ktore = ktorePytanie;
             if (main.translationFromPolish == true)
             {
@@ -42,22 +46,27 @@ namespace Fiszki
 
             main.gameHard.Visibility = Visibility.Visible;
             main.playHardNextButton.Visibility = Visibility.Hidden;
-            main.colorChange(main);
+            main.colorChange();
 
             main.questionHard.Content = question;
+            if (ktore == 9)
+            {
+                main.playHardNextButton.Content = "Koniec";
+            }
+                
+            else
+                main.playHardNextButton.Content = "Dalej";
         }
 
         public override void check(string answer, MainWindow main)
         {
             if (main.answerHard.Text == correctAnswer)
             {
-                main.answerHard.Foreground = Brushes.LightGreen;
                 main.nextHard.Visibility = Visibility.Hidden;
                 point = true;
             }
             else
             {
-                main.answerHard.Foreground = Brushes.Red;
                 main.nextHard.Visibility = Visibility.Hidden;
                 main.correctAnswerHard.Visibility = Visibility.Visible;
                 main.correctAnswerHard.FontWeight = FontWeights.Bold;
@@ -68,6 +77,19 @@ namespace Fiszki
             main.nextHard.Visibility = Visibility.Hidden;
             main.playHardNextButton.Visibility = Visibility.Visible;
             userAnswer = answer;
+
+            if (main.tryb == 2 && ktore > 0)
+                main.previousQuestionHard.Visibility = Visibility.Visible;
+            if (ktore == 9)
+            {
+                main.playHardNextButton.Content = "Koniec";
+                end = true;
+            }
+            else
+            {
+                main.playHardNextButton.Content = "Dalej";
+                end = false;
+            }
         }
 
         public override Answer GetQuestion()
@@ -83,12 +105,17 @@ namespace Fiszki
 
             main.gameHard.Visibility = Visibility.Visible;
             main.playHardNextButton.Visibility = Visibility.Hidden;
-            main.colorChange(main);
+            main.colorChange();
 
             main.questionHard.Content = question;
 
             //ans.UserAnswer - wpisać 
             main.answerHard.Text = ans.UserAnswer;
+        }
+
+        public void showNumber(MainWindow main)
+        {
+            main.questionNumHard.Content = "Pytanie " + (ktore + 1).ToString() + "/10";
         }
     }
 }

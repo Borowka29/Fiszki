@@ -74,6 +74,10 @@ namespace Fiszki
             {
                 item.Background = Brushes.Azure;
             }
+            foreach (Button item in main.EditWords.Children.OfType<Button>())
+            {
+                item.Background = Brushes.Azure;
+            }
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fiszki"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="400">
+        Title="MainWindow" Height="300" Width="400">
 
     
     <Grid Name="mainGrid" >
@@ -73,11 +73,8 @@
             <Slider Name="difficultSetter" Grid.Column="1" VerticalAlignment="Center" Margin="5" IsSnapToTickEnabled="True" 
                     ValueChanged="Difficult_ValueChanged" Maximum="2"></Slider>
             <ComboBox Name="colorSetter" Grid.Row="1" Grid.Column="1" Margin="10" SelectionChanged="colorSetter_SelectionChanged"></ComboBox>
-            <Label Grid.Row="2" VerticalAlignment="Center" Name="boldLabel" HorizontalAlignment="Right" Margin="5">Pogrubionaa czcionka:</Label>
             <Button Name="settingsBackButton" Grid.Column="1" Grid.Row="4" Margin="10" Height="20" Width="70" VerticalAlignment="Bottom" 
                     HorizontalAlignment="Right" Click="BackButton_Click">wróć</Button>
-            <CheckBox Name="boldCheck" Grid.Row="2" Grid.Column="1" Margin="10" VerticalAlignment="Center" 
-                      Checked="boldCheck_Checked" Unchecked="boldCheck_Unchecked"></CheckBox>
             <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
                 <Label>Zmień tłumaczenie języka z:</Label>
                 <WrapPanel Grid.Row="1">
@@ -120,14 +117,14 @@
                 <ListView.View>
                     <GridView >
                         <GridView.Columns>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=PolishVersion}">
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=PolishVersion}" Width="150">
                                 <GridViewColumn.Header>
                                     <GridViewColumnHeader>
                                         Pol
                                     </GridViewColumnHeader>
                                 </GridViewColumn.Header>
                             </GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=EnglishVersion}">
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=EnglishVersion}" Width="150">
                                 <GridViewColumn.Header>
                                     <GridViewColumnHeader>
                                         Ang
@@ -220,15 +217,17 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Name="answerEasy1" x:FieldModifier="public" Margin="10" Click="answer_Click"></Button>
-                <Button Name="answerEasy2" x:FieldModifier="public" Grid.Column="1" Margin="10" Click="answer_Click"></Button>
-                <Button Name="answerEasy3" x:FieldModifier="public" Grid.Column="2" Margin="10" Click="answer_Click"></Button>
+                <Button Name="answerEasy1" x:FieldModifier="public" Margin="10" Height="50" Click="answer_Click"></Button>
+                <Button Name="answerEasy2" x:FieldModifier="public" Grid.Column="1" Height="50" Margin="10" Click="answer_Click"></Button>
+                <Button Name="answerEasy3" x:FieldModifier="public" Grid.Column="2" Height="50" Margin="10" Click="answer_Click"></Button>
 
             </Grid>
             <Button Name="playEasyBackButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
                     Margin="5" Click="BackButton_Click">Wroć</Button>
             <Button Name="playEasyNextButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right"
                     Margin="5,5,90,5" Click="NextButton_Click" Visibility="Hidden">Dalej</Button>
+            <Button Name="previousQuestionEasy" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
+                    Margin="10,10,100,10" Click="Previous_Click">Poprzednie</Button>
         </Grid>
 
 
@@ -250,16 +249,18 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Name="answerMedium1" x:FieldModifier="public" Margin="5,10,5,10" Click="answer_Click"></Button>
-                <Button Name="answerMedium2" x:FieldModifier="public" Grid.Column="1" Margin="5,10,5,10" Click="answer_Click"></Button>
-                <Button Name="answerMedium3" x:FieldModifier="public" Grid.Column="2" Margin="5,10,5,10" Click="answer_Click"></Button>
-                <Button Name="answerMedium4" x:FieldModifier="public" Grid.Column="3" Margin="5,10,5,10" Click="answer_Click"></Button>
+                <Button Name="answerMedium1" x:FieldModifier="public" Margin="5,10,5,10" Height="50" Click="answer_Click"></Button>
+                <Button Name="answerMedium2" x:FieldModifier="public" Grid.Column="1" Margin="5,10,5,10" Height="50" Click="answer_Click"></Button>
+                <Button Name="answerMedium3" x:FieldModifier="public" Grid.Column="2" Margin="5,10,5,10" Height="50" Click="answer_Click"></Button>
+                <Button Name="answerMedium4" x:FieldModifier="public" Grid.Column="3" Margin="5,10,5,10" Height="50" Click="answer_Click"></Button>
 
             </Grid>
             <Button Name="playMediumBackButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
                     Margin="5" Click="BackButton_Click">Wroć</Button>
             <Button Name="playMediumNextButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right"
                     Margin="5,5,90,5" Click="NextButton_Click" Visibility="Hidden">Dalej</Button>
+            <Button Name="previousQuestionMedium" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
+                    Margin="10,10,180,10" Click="Previous_Click" Visibility="Hidden">Poprzednie</Button>
         </Grid>
 
 
@@ -274,7 +275,7 @@
             <Label Name="questionNumHard" x:FieldModifier="public" FontWeight="Bold" HorizontalAlignment="Center">Pytanie 1/15</Label>
             <Label Name="questionHard" x:FieldModifier="public" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">xxx</Label>
             <Grid Grid.Row="2" Name="gameHardInside">
-                <TextBox Name="answerHard" x:FieldModifier="public" Width="250" Margin="10" HorizontalAlignment="Left"></TextBox>
+                <TextBox Name="answerHard" x:FieldModifier="public" Width="250" Height="30" Margin="10" HorizontalAlignment="Left"></TextBox>
                 <Button Name="nextHard" x:FieldModifier="public" Width="70" Height="20" HorizontalAlignment="Right" Margin="10"
                         Visibility="Visible">Sprawdź</Button>
                 <Button Name="playHardNextButton" x:FieldModifier="public" Width="70" Height="20" HorizontalAlignment="Right" Margin="10"
@@ -284,6 +285,8 @@
             </Grid>
             <Button Name="playHardBackButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
                     Margin="10" Click="BackButton_Click">Wroć</Button>
+            <Button Name="previousQuestionHard" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
+                    Margin="10,10,100,10" Click="Previous_Click" Visibility="Hidden">Poprzednie</Button>
 
         </Grid>
 

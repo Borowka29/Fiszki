@@ -68,7 +68,6 @@ namespace Fiszki
             NewUser.Password = password;
             NewUser.LevelHard = 1;
             NewUser.Color = 1;
-            NewUser.IsBold = false;
             if(db.Account.Where(p=>p.Username==userName).ToList().Count==0)
             {
                 db.Account.Add(NewUser);
@@ -78,12 +77,11 @@ namespace Fiszki
             return false;
             
         }
-        public static void updateDataUser(int id, double difficult, int color, bool isBold)
+        public static void updateDataUser(int id, double difficult, int color)
         {
             Account User = db.Account.Where(z => z.Id == id).FirstOrDefault();
             User.LevelHard = difficult;
             User.Color = color;
-            User.IsBold = isBold;
             db.Attach(User).State = EntityState.Modified;
             db.SaveChanges();
         }

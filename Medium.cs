@@ -31,7 +31,12 @@ namespace Fiszki
 
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
+            main.gameMedium.Visibility = Visibility.Visible;
+            main.playMediumNextButton.Visibility = Visibility.Hidden;
+            main.previousQuestionMedium.Visibility = Visibility.Hidden;
+
             ktore = ktorePytanie;
+            showNumber(main);
             losuj();
             if (main.translationFromPolish == true)
             {
@@ -52,7 +57,6 @@ namespace Fiszki
 
             main.gameMedium.Visibility = Visibility.Visible;
             main.playMediumNextButton.Visibility = Visibility.Hidden;
-            main.colorChange(main);
 
             main.questionEasy.Content = question;
             main.questionMedium.Content = question;
@@ -67,7 +71,6 @@ namespace Fiszki
                 main.answerMedium3.Content = wrongAnswer[1];
                 main.answerMedium4.Content = wrongAnswer[2];
             }
-
             else if (correctIndex == 1)
             {
                 main.answerMedium2.Content = correctAnswer;
@@ -76,7 +79,6 @@ namespace Fiszki
                 main.answerMedium3.Content = wrongAnswer[1];
                 main.answerMedium4.Content = wrongAnswer[2];
             }
-
             else if (correctIndex == 2)
             {
                 main.answerMedium3.Content = correctAnswer;
@@ -85,7 +87,6 @@ namespace Fiszki
                 main.answerMedium2.Content = wrongAnswer[1];
                 main.answerMedium4.Content = wrongAnswer[2];
             }
-
             else if (correctIndex == 3)
             {
                 main.answerMedium4.Content = correctAnswer;
@@ -105,43 +106,48 @@ namespace Fiszki
                 indexy[0] = this.rand.Next(0, 4);
                 indexy[1] = this.rand.Next(0, 4);
                 indexy[2] = this.rand.Next(0, 4);
-            } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore|| indexy[2]== indexy[1]|| indexy[2]== indexy[0]|| indexy[2]==ktore);
+            } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore|| indexy[2]== indexy[1]|| indexy[2]== indexy[0]|| 
+                     indexy[2]==ktore);
         }
         
         public override void check(string answer, MainWindow main)
         {
-            main.answerMedium1.Background = Brushes.Red;
-            main.answerMedium2.Background = Brushes.Red;
-            main.answerMedium3.Background = Brushes.Red;
-            main.answerMedium4.Background = Brushes.Red;
 
             if (correctIndex == 0)
             {
-                main.answerMedium1.Background = Brushes.LightGreen;
                 if (answer == "m1")
                     point = true;
             }
             else if (correctIndex == 1)
             {
-                main.answerMedium2.Background = Brushes.LightGreen;
                 if (answer == "m2")
                     point = true;
             }
             else if (correctIndex == 2)
             {
-                main.answerMedium3.Background = Brushes.LightGreen;
                 if (answer == "m3")
                     point = true;
             }
             else if (correctIndex == 3)
             {
-                main.answerMedium4.Background = Brushes.LightGreen;
                 if (answer == "m4")
                     point = true;
             }
             userAnswer = answer;
 
-            main.playMediumNextButton.Visibility = Visibility.Visible;
+                main.playMediumNextButton.Visibility = Visibility.Visible;
+            if (main.tryb == 2 && ktore > 0)
+                main.previousQuestionMedium.Visibility = Visibility.Visible;
+            if (ktore == 9)
+            {
+                main.playMediumNextButton.Content = "Koniec";
+                end = true;
+            }
+            else
+            {
+                main.playMediumNextButton.Content = "Dalej";
+                end = false;
+            }
         }
 
         public override Answer GetQuestion()
@@ -157,7 +163,7 @@ namespace Fiszki
 
             main.gameMedium.Visibility = Visibility.Visible;
             main.playMediumNextButton.Visibility = Visibility.Hidden;
-            main.colorChange(main);
+            main.colorChange();
 
             main.questionEasy.Content = question;
             main.questionMedium.Content = question;
@@ -215,6 +221,11 @@ namespace Fiszki
                 main.answerMedium4.Background = Brushes.Blue;
 
             point = false;
+        }
+
+        public void showNumber(MainWindow main)
+        {
+            main.questionNumMedium.Content = "Pytanie " + (ktore + 1).ToString() + "/10";
         }
     }
 }

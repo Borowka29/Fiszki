@@ -15,6 +15,5 @@ namespace Fiszki.Models
         public string Password { get; set; }
         public double LevelHard{ get; set; }
         public int Color { get; set; }
-        public bool IsBold { get; set; }
     }
 }

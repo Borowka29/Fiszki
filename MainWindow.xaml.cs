@@ -25,14 +25,23 @@ namespace Fiszki
     {
         private double difficult { get; set; }
         public int color { get; set; } 
-        private string[] colorList = { "szary", "różowy", "niebieski", "zielony", "krejzolski" };
-        public bool isBold { get; set; }
+        private string[] colorList = { "szary", "różowy", "niebieski", "zielony", "paskudny" };
+
         private Baza Baza { get; set; }
         public Account User { get; set; }
         private static LearningMode learningMode { get; set; }
         private static TestMode testMode { get; set; }
         public Decorator decorator;
         public List<Word> ListOfWords { get; set; }
+
+        private bool succesfullAddWord;
+        private bool succesfullEditWord;
+        private Word EditWord;
+
+        public int tryb; //1- nauka, 2-test
+
+        public bool translationFromPolish;
+        int i = 1;
 
         public MainWindow()
         {
@@ -42,7 +51,7 @@ namespace Fiszki
             Login.Visibility = Visibility.Visible;
             learningMode = new LearningMode();
             testMode = new TestMode();
-            //colorSetter.SelectedItem = colorList[color];
+
             Baza = Baza.GetInstance();
             Refresh();
         }
@@ -55,47 +64,49 @@ namespace Fiszki
              */
 
             difficult = difficultSetter.Value;
+            User.LevelHard = difficult;
         }
 
         private void colorSetter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            colorChange(this);
+            colorChange();
+            User.Color = color;
         }
 
-        public void colorChange(MainWindow main)
+        public void colorChange()
         {
 
             /* 1. szary
              * 2. rozowy
              * 3. niebieski
              * 4. zielony
-             * 5. krejzolski
+             * 5. jakiś paskudny
              */
 
             if (colorSetter.SelectedItem.ToString() == "szary")
             {
                 decorator = new GrayDecorator();
-                decorator.changeColor(main);
+                decorator.changeColor(this);
             }
             else if (colorSetter.SelectedItem.ToString() == "różowy")
             {
                 decorator = new PinkDecorator();
-                decorator.changeColor(main);
+                decorator.changeColor(this);
             }
             else if (colorSetter.SelectedItem.ToString() == "niebieski")
             {
                 decorator = new BlueDecorator();
-                decorator.changeColor(main);
+                decorator.changeColor(this);
             }
             else if (colorSetter.SelectedItem.ToString() == "zielony")
             {
                 decorator = new GreenDecorator();
-                decorator.changeColor(main);
+                decorator.changeColor(this);
             }
-            else if (colorSetter.SelectedItem.ToString() == "krejzolski")
+            else if (colorSetter.SelectedItem.ToString() == "paskudny")
             {
                 decorator = new UglyDecorator();
-                decorator.changeColor(main);
+                decorator.changeColor(this);
             }
 
         }
@@ -133,15 +144,10 @@ namespace Fiszki
 
         private void quitButton_Click(object sender, RoutedEventArgs e)
         {
-            Baza.updateDataUser(User.Id, difficult, color, isBold);
-            //User.LevelHard = difficult;
-            //User.Color = color;
-            //User.IsBold =isBold;
-            //db.Attach(User).State = EntityState.Modified;
-            //db.SaveChanges();
+            Baza.updateDataUser(User.Id, difficult, color);
             Close();
         }
-        private int tryb;
+
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             if (sender == naukaButton)
@@ -189,44 +195,32 @@ namespace Fiszki
             
             if (playEasyNextButton.Visibility == Visibility.Hidden)
             {
+                string senderString = null;
+
+                if (sender == answerEasy1)
+                    senderString = "e1";
+                else if (sender == answerEasy2)
+                    senderString = "e2";
+                else if (sender == answerEasy3)
+                    senderString = "e3";
+                else if (sender == answerMedium1)
+                    senderString = "m1";
+                else if (sender == answerMedium2)
+                    senderString = "m2";
+                else if (sender == answerMedium3)
+                    senderString = "m3";
+                else if (sender == answerMedium4)
+                    senderString = "m4";
+                else if (sender == answerHard)
+                    senderString = "h";
+
                 if (tryb == 1)
-                {
-                    if (sender == answerEasy1)
-                        learningMode.check("e1", this);
-                    else if (sender == answerEasy2)
-                        learningMode.check("e2", this);
-                    else if (sender == answerEasy3)
-                        learningMode.check("e3", this);
-                    else if (sender == answerMedium1)
-                        learningMode.check("m1", this);
-                    else if (sender == answerMedium2)
-                        learningMode.check("m2", this);
-                    else if (sender == answerMedium3)
-                        learningMode.check("m3", this);
-                    else if (sender == answerMedium4)
-                        learningMode.check("m4", this);
-                    else if (sender == answerHard)
-                        learningMode.check("h", this);
-                }
+                    learningMode.check(senderString, this);
                 else
                 {
-                    if (sender == answerEasy1)
-                        testMode.check("e1", this);
-                    else if (sender == answerEasy2)
-                        testMode.check("e2", this);
-                    else if (sender == answerEasy3)
-                        testMode.check("e3", this);
-                    else if (sender == answerMedium1)
-                        testMode.check("m1", this);
-                    else if (sender == answerMedium2)
-                        testMode.check("m2", this);
-                    else if (sender == answerMedium3)
-                        testMode.check("m3", this);
-                    else if (sender == answerMedium4)
-                        testMode.check("m4", this);
-                    else if (sender == answerHard)
-                        testMode.check("h", this);
+                    testMode.check(senderString, this);
                 }
+                    
                     
             }
 
@@ -234,12 +228,22 @@ namespace Fiszki
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
+            if(testMode.end)
+            {
+                gameEasy.Visibility = Visibility.Hidden;
+                gameMedium.Visibility = Visibility.Hidden;
+                gameHard.Visibility = Visibility.Hidden;
+
+                gameOver.Visibility = Visibility.Visible;
+
+                return;
+            }
 
             if (sender == playEasyNextButton)
                 playEasyNextButton.Visibility = Visibility.Hidden;
             else if (sender == playMediumNextButton)
                 playMediumNextButton.Visibility = Visibility.Hidden;
-            else if (sender == playMediumNextButton)
+            else if (sender == playHardNextButton)
             {
                 playHardNextButton.Visibility = Visibility.Hidden;
                 nextHard.Visibility = Visibility.Visible;
@@ -249,22 +253,11 @@ namespace Fiszki
                 learningMode.DrowACard(this);
 
             }
-            if (tryb != 1)
+            if (tryb == 2)
             {
                 testMode.DrowACard(this);
 
             }
-        }
-
-        private void boldCheck_Checked(object sender, RoutedEventArgs e)
-        {
-            decorator = new BoldDecorator();
-            decorator.changeColor(this);
-        }
-
-        private void boldCheck_Unchecked(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void Zaloguj_Click(object sender, RoutedEventArgs e)
@@ -281,7 +274,7 @@ namespace Fiszki
             }
             string password = userPassword.Password.ToString();
             
-            User = Baza.getUserData(login);//db.Account.Where(p => p.Username == login).FirstOrDefault();
+            User = Baza.getUserData(login); //db.Account.Where(p => p.Username == login).FirstOrDefault();
 
             if (User != null)
             {
@@ -291,10 +284,14 @@ namespace Fiszki
                     Login.Visibility = Visibility.Collapsed;
                     menu.Visibility = Visibility.Visible;
                     difficult = User.LevelHard;
-                    isBold = User.IsBold;
                     color = User.Color;
                     userLogin.Text = "";
                     userPassword.Password = "";
+
+                    colorSetter.SelectedItem = colorList[color];
+                    difficultSetter.Value = difficult;
+                    colorChange();
+
                     return;
                 }
 
@@ -303,6 +300,7 @@ namespace Fiszki
             }
             Wynik.Content = "Podany użytkownik nie istnieje!";
             Wynik.Visibility = Visibility.Visible;
+
             return;
         }
 
@@ -339,8 +337,7 @@ namespace Fiszki
                 WynikR.Visibility = Visibility.Visible;
             }
         }
-        public bool translationFromPolish;
-        int i = 1;
+
         private void Btn1_Checked(object sender, RoutedEventArgs e)
         {
             if (i != 1)
@@ -351,11 +348,13 @@ namespace Fiszki
             i = 2;
 
         }
+
         private void Refresh()
         {
             ListOfWords = Baza.getListWordLocal();
             WordsListView.ItemsSource = ListOfWords;
         }
+
         private void DodajButton_Click(object sender, RoutedEventArgs e)
         {
             changeDatabaseWords.Visibility = Visibility.Hidden;
@@ -366,8 +365,7 @@ namespace Fiszki
                 succesfullAddWord = false;
             }
         }
-        private bool succesfullEditWord;
-        private Word EditWord;
+
         private void EdytujButton_Click(object sender, RoutedEventArgs e)
         {
             EditWord = WordsListView.SelectedItem as Word;
@@ -405,7 +403,7 @@ namespace Fiszki
                 DeleteButton.IsEnabled = false;
             }
         }
-        private bool succesfullAddWord;
+
         private void AddWordButton_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(polishTranslation.Text) && !string.IsNullOrEmpty(englishTranslation.Text))
@@ -444,6 +442,11 @@ namespace Fiszki
         {
             changeDatabaseWords.Visibility = Visibility.Visible;
             EditWords.Visibility = Visibility.Hidden;
+        }
+
+        private void Previous_Click(object sender, RoutedEventArgs e)
+        {
+            testMode.Cofnij(this);
         }
     }
 }
