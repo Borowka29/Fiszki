@@ -24,13 +24,19 @@ namespace Fiszki
             }
             return instance;
         }
+        public static List<Word> getListWordLocal()
+        {
+            db.Word.Load();
+            List<Word> localDatabase = db.Word.Local.ToList();
+            return localDatabase;
+        }
         public static List<Word> getListWord()
         {
             return db.Word.ToList();
         }
-        public static void deleteWord(string pol, string ang)
+        public static void deleteWord(Word wordd)
         {
-            Word word=db.Word.Where(z=>z.PolishVersion==pol&&z.EnglishVersion==ang).FirstOrDefault();
+            Word word = db.Word.Where(z => z == wordd).FirstOrDefault();
             db.Word.Remove(word);
             db.SaveChanges();
         }

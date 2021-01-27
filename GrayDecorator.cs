@@ -30,7 +30,7 @@ namespace Fiszki
             {
                 item.Background = Brushes.LightGray;
             }
-            foreach (Button item in main.highscore.Children.OfType<Button>())
+            foreach (Button item in main.changeDatabaseWords.Children.OfType<Button>())
             {
                 item.Background = Brushes.LightGray;
             }

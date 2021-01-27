@@ -23,7 +23,7 @@ namespace Fiszki
         {
             main.startButton.FontWeight = FontWeights.Bold;
             main.settingsButton.FontWeight = FontWeights.Bold;
-            main.highScoreButton.FontWeight = FontWeights.Bold;
+            main.databaseWordButton.FontWeight = FontWeights.Bold;
             main.quitButton.FontWeight = FontWeights.Bold;
             main.playEasyBackButton.FontWeight = FontWeights.Bold;
             main.playMediumBackButton.FontWeight = FontWeights.Bold;

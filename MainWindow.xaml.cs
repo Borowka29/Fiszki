@@ -32,7 +32,7 @@ namespace Fiszki
         private static LearningMode learningMode { get; set; }
         private static TestMode testMode { get; set; }
         public Decorator decorator;
-
+        public List<Word> ListOfWords { get; set; }
 
         public MainWindow()
         {
@@ -102,7 +102,7 @@ namespace Fiszki
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             menu.Visibility = Visibility.Visible;
-            highscore.Visibility = Visibility.Hidden;
+            changeDatabaseWords.Visibility = Visibility.Hidden;
             settings.Visibility = Visibility.Hidden;
             gameOver.Visibility = Visibility.Hidden;
             start.Visibility = Visibility.Hidden;
@@ -124,10 +124,10 @@ namespace Fiszki
             settings.Visibility = Visibility.Visible;
         }
 
-        private void highScoreButton_Click(object sender, RoutedEventArgs e)
+        private void changeDatabaseWords_Click(object sender, RoutedEventArgs e)
         {
             menu.Visibility = Visibility.Hidden;
-            highscore.Visibility = Visibility.Visible;
+            changeDatabaseWords.Visibility = Visibility.Visible;
         }
 
         private void quitButton_Click(object sender, RoutedEventArgs e)
@@ -344,6 +344,112 @@ namespace Fiszki
                 WynikR.Content = "Login jest już zajęty!";
                 WynikR.Visibility = Visibility.Visible;
             }
+        }
+        public bool translationFromPolish;
+        int i = 1;
+        private void Btn1_Checked(object sender, RoutedEventArgs e)
+        {
+            if (i != 1)
+            {
+                if (angpol.IsChecked == true) translationFromPolish = false;
+                else translationFromPolish = true;
+            }
+            i = 2;
+
+        }
+        private void Refresh()
+        {
+            ListOfWords = Baza.getListWordLocal();
+            WordsListView.ItemsSource = ListOfWords;
+        }
+        private void DodajButton_Click(object sender, RoutedEventArgs e)
+        {
+            changeDatabaseWords.Visibility = Visibility.Hidden;
+            CreateWords.Visibility = Visibility.Visible;
+
+            if (succesfullAddWord)
+            {
+                succesfullAddWord = false;
+            }
+        }
+        private bool succesfullEditWord;
+        private Word EditWord;
+        private void EdytujButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditWord = WordsListView.SelectedItem as Word;
+            polishTranslationEdit.Text = EditWord.PolishVersion;
+            englishTranslationEdit.Text = EditWord.EnglishVersion;
+
+            changeDatabaseWords.Visibility = Visibility.Hidden;
+            EditWords.Visibility = Visibility.Visible;
+            if (succesfullEditWord)
+            {
+                succesfullEditWord = false;
+            }
+        }
+
+        private void UsuńButton_Click(object sender, RoutedEventArgs e)
+        {
+            Word word = WordsListView.SelectedItem as Word;
+            if (word != null)
+            {
+                Baza.deleteWord(word);
+                Refresh();
+            }
+        }
+
+        private void KategorieListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (WordsListView.SelectedItem != null)
+            {
+                EditButton.IsEnabled = true;
+                DeleteButton.IsEnabled = true;
+            }
+            else
+            {
+                EditButton.IsEnabled = false;
+                DeleteButton.IsEnabled = false;
+            }
+        }
+        private bool succesfullAddWord;
+        private void AddWordButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(polishTranslation.Text) && !string.IsNullOrEmpty(englishTranslation.Text))
+            {
+                Baza.addeWord(polishTranslation.Text, englishTranslation.Text);
+                changeDatabaseWords.Visibility = Visibility.Visible;
+                CreateWords.Visibility = Visibility.Hidden;
+                polishTranslation.Text = "";
+                englishTranslation.Text = "";
+                succesfullAddWord = true;
+                Refresh();
+            }
+        }
+
+        private void CancelAddWordButton_Click(object sender, RoutedEventArgs e)
+        {
+            changeDatabaseWords.Visibility = Visibility.Visible;
+            CreateWords.Visibility = Visibility.Hidden;
+        }
+
+        private void EditWordButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(polishTranslationEdit.Text) && !string.IsNullOrEmpty(englishTranslationEdit.Text))
+            {
+                Baza.updateWord(EditWord.Id, polishTranslationEdit.Text, englishTranslationEdit.Text);
+                changeDatabaseWords.Visibility = Visibility.Visible;
+                EditWords.Visibility = Visibility.Hidden;
+                polishTranslationEdit.Text = "";
+                englishTranslationEdit.Text = "";
+                succesfullEditWord = true;
+                Refresh();
+            }
+        }
+
+        private void CancelEditWordButton_Click(object sender, RoutedEventArgs e)
+        {
+            changeDatabaseWords.Visibility = Visibility.Visible;
+            EditWords.Visibility = Visibility.Hidden;
         }
     }
 }

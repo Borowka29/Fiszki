@@ -50,7 +50,7 @@
 
             <Button Name="startButton" Height="30" Width="180" Click="startButton_Click">Rozpocznij</Button>
             <Button Name="settingsButton" Grid.Row="1" Height="30" Width="180" Click="settingsButton_Click">Opcje</Button>
-            <Button Name="highScoreButton" Grid.Row="2" Height="30" Width="180" Click="highScoreButton_Click">Najlepsze wyniki</Button>
+            <Button Name="databaseWordButton" Grid.Row="2" Height="30" Width="180" Click="changeDatabaseWords_Click">Zmiana bazy słówek</Button>
             <Button Name="quitButton" Grid.Row="3" Height="30" Width="180" Click="quitButton_Click">Wyjście</Button>
         </Grid>
 
@@ -58,6 +58,7 @@
         
         <Grid Name="settings" Visibility="Hidden">
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -73,10 +74,17 @@
                     ValueChanged="Difficult_ValueChanged" Maximum="2"></Slider>
             <ComboBox Name="colorSetter" Grid.Row="1" Grid.Column="1" Margin="10" SelectionChanged="colorSetter_SelectionChanged"></ComboBox>
             <Label Grid.Row="2" VerticalAlignment="Center" Name="boldLabel" HorizontalAlignment="Right" Margin="5">Pogrubionaa czcionka:</Label>
-            <Button Name="settingsBackButton" Grid.Column="1" Grid.Row="3" Margin="10" Height="20" Width="70" VerticalAlignment="Bottom" 
+            <Button Name="settingsBackButton" Grid.Column="1" Grid.Row="4" Margin="10" Height="20" Width="70" VerticalAlignment="Bottom" 
                     HorizontalAlignment="Right" Click="BackButton_Click">wróć</Button>
             <CheckBox Name="boldCheck" Grid.Row="2" Grid.Column="1" Margin="10" VerticalAlignment="Center" 
                       Checked="boldCheck_Checked" Unchecked="boldCheck_Unchecked"></CheckBox>
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
+                <Label>Zmień tłumaczenie języka z:</Label>
+                <WrapPanel Grid.Row="1">
+                    <RadioButton Name = "polang"  Margin = "10,5,0,0" Checked = "Btn1_Checked" IsChecked="True">polskiego na angielski</RadioButton>
+                    <RadioButton Name = "angpol"  Margin = "10,5,0,0" Checked = "Btn1_Checked" >angielskiego na polski</RadioButton>
+                </WrapPanel>
+            </StackPanel>
         </Grid>
 
 
@@ -102,16 +110,96 @@
         </Grid>
 
 
-        <Grid Name="highscore" Visibility="Hidden">
+        <Grid Name="changeDatabaseWords" Visibility="Hidden">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
-                <RowDefinition/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="7*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
+            <ListView Name="WordsListView" SelectionChanged="KategorieListView_SelectionChanged" SelectionMode="Single">
+                <ListView.View>
+                    <GridView >
+                        <GridView.Columns>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=PolishVersion}">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader>
+                                        Pol
+                                    </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=EnglishVersion}">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader>
+                                        Ang
+                                    </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
 
-            <Label>Najlepsze wyniki</Label>
-            <ListBox Name="highscoreList" Margin="5,0,5,0" Grid.Row="1"></ListBox>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Margin="5" Padding="20, 5" Grid.Column="0" Name="AddButton" Click="DodajButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Center">Dodaj</Button>
+                <Button Margin="5" Padding="20, 5" Grid.Column="1" Name="EditButton" Click="EdytujButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Center" IsEnabled="False">Edytuj</Button>
+                <Button Margin="5" Padding="20, 5" Grid.Column="2" Name="DeleteButton" Click="UsuńButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Center" IsEnabled="False">Usuń</Button>
+            </Grid>
             <Button Grid.Row="2" Height="20" Width="70" HorizontalAlignment="Right" Margin="5" Click="BackButton_Click">Wroć</Button>
+        </Grid>
+
+        <Grid Name="CreateWords" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center">Polskie tłumaczenie:</Label>
+            <TextBox Name="polishTranslation" Margin="5" Padding="5" Grid.Column="1"/>
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">Angielskie tłumaczenie:</Label>
+            <TextBox Name="englishTranslation" Margin="5" Padding="5" Grid.Row="1" Grid.Column="2"/>
+            <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Name="DodajButton" Click="AddWordButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2" Margin="5" Padding="20, 5" IsDefault="True">Dodaj</Button>
+                <Button Name="AnulujButton" Click="CancelAddWordButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2" Margin="5" Padding="20, 5" Grid.Column="1" IsCancel="True">Anuluj</Button>
+            </Grid>
+        </Grid>
+
+        <Grid Name="EditWords" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center">Polskie tłumaczenie:</Label>
+            <TextBox Name="polishTranslationEdit" Margin="5" Padding="5" Grid.Column="1"/>
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">Angielskie tłumaczenie:</Label>
+            <TextBox Name="englishTranslationEdit" Margin="5" Padding="5" Grid.Row="1" Grid.Column="2"/>
+            <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Click="EditWordButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2" Margin="5" Padding="20, 5" IsDefault="True">Dodaj</Button>
+                <Button Click="CancelEditWordButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2" Margin="5" Padding="20, 5" Grid.Column="1" IsCancel="True">Anuluj</Button>
+            </Grid>
         </Grid>
 
 
