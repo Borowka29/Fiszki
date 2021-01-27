@@ -32,12 +32,22 @@ namespace Fiszki
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
             ktore = ktorePytanie;
-            this.question = tabWords[ktore].PolishVersion;
-            this.correctAnswer = tabWords[ktore].EnglishVersion;
-
             losuj();
-            this.wrongAnswer[0] = tabWords[indexy[0]].EnglishVersion;
-            this.wrongAnswer[1] = tabWords[indexy[1]].EnglishVersion;
+            if (main.translationFromPolish == true)
+            {
+                this.question = tabWords[ktore].PolishVersion;
+                this.correctAnswer = tabWords[ktore].EnglishVersion;
+                this.wrongAnswer[0] = tabWords[indexy[0]].EnglishVersion;
+                this.wrongAnswer[1] = tabWords[indexy[1]].EnglishVersion;
+            }
+            else
+            {
+                this.question = tabWords[ktore].EnglishVersion;
+                this.correctAnswer = tabWords[ktore].PolishVersion;
+                this.wrongAnswer[0] = tabWords[indexy[0]].PolishVersion;
+                this.wrongAnswer[1] = tabWords[indexy[1]].PolishVersion;
+            }
+            
 
             main.questionEasy.Content = question;
 

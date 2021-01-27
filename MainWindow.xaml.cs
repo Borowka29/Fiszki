@@ -44,6 +44,7 @@ namespace Fiszki
             testMode = new TestMode();
             //colorSetter.SelectedItem = colorList[color];
             Baza = Baza.GetInstance();
+            Refresh();
         }
 
         private void Difficult_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -319,13 +320,6 @@ namespace Fiszki
             if (userLoginR.Text!="" && password != "")
             {
                 udałoSie= Baza.createNewUser(userLoginR.Text, password);
-                //NewUser.Username = userLoginR.Text;
-                //NewUser.Password = password;
-                //NewUser.LevelHard = 1;
-                //NewUser.Color = 1;
-                //NewUser.IsBold = false;
-                //db.Account.Add(NewUser);
-                //db.SaveChanges();
 
             }
             else

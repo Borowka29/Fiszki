@@ -29,8 +29,16 @@ namespace Fiszki
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
             ktore = ktorePytanie;
-            this.question = tabWords[ktore].PolishVersion;
-            this.correctAnswer = tabWords[ktore].EnglishVersion;
+            if (main.translationFromPolish == true)
+            {
+                this.question = tabWords[ktore].PolishVersion;
+                this.correctAnswer = tabWords[ktore].EnglishVersion;
+            }
+            else
+            {
+                this.question = tabWords[ktore].EnglishVersion;
+                this.correctAnswer = tabWords[ktore].PolishVersion;
+            }
 
             main.gameHard.Visibility = Visibility.Visible;
             main.playHardNextButton.Visibility = Visibility.Hidden;

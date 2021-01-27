@@ -112,8 +112,8 @@
 
         <Grid Name="changeDatabaseWords" Visibility="Hidden">
             <Grid.RowDefinitions>
-                <RowDefinition Height="7*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <ListView Name="WordsListView" SelectionChanged="KategorieListView_SelectionChanged" SelectionMode="Single">
