@@ -229,13 +229,18 @@ namespace Fiszki
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            if(testMode.end)
+
+            testMode.ZapiszStan();
+
+            if (testMode.end)
             {
                 gameEasy.Visibility = Visibility.Hidden;
                 gameMedium.Visibility = Visibility.Hidden;
                 gameHard.Visibility = Visibility.Hidden;
 
                 gameOver.Visibility = Visibility.Visible;
+
+                TestAnwers.ItemsSource=testMode.Historia;
 
                 return;
             }
@@ -257,7 +262,6 @@ namespace Fiszki
             if (tryb == 2)
             {
                 testMode.DrowACard(this);
-                testMode.ZapiszStan();
             }
         }
 

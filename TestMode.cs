@@ -11,13 +11,14 @@ namespace Fiszki
         public bool end = false;
 
         private Answer Odp;
-        private List<Snapshot> Historia = new List<Snapshot>();
+        public List<Snapshot> Historia { get; } = new List<Snapshot>();
         private Pytanie Originator = new Pytanie(); //aktualne pytanie
         private int Current = -1;
         private Strategia LeveOfDifficulty;
         private Word[] tabWords { get; set; }
         private Random rand { get; set; }
         private int którePytanie { get; set; }
+
         public void setStrategia(Strategia strategia, List<Word> words)
         {
             rand = new Random();
@@ -79,7 +80,7 @@ namespace Fiszki
         }
 
     }
-    class Snapshot
+    public class Snapshot
     {
         public Answer Odp { get; }
         public Snapshot(Answer Odpowiedzi)

@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fiszki"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="400">
+        Title="MainWindow" Height="300" Width="450">
 
     
     <Grid Name="mainGrid" >
 
-        <Grid Name="Login" >
+        <Grid Name="Login" Visibility="Hidden">
             <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
 
                 <Label Margin="0, 2,0,2">Login:</Label>
@@ -292,12 +292,33 @@
 
         <Grid Name="gameOver" Visibility="Hidden">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center">Twój wynik to:</Label>
-            <Label Name="score" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">00/15</Label>
+            <ListView Grid.Row="1" Name="TestAnwers" IsEnabled="False" Height="auto">
+                <ListView.View>
+                    <GridView >
+                        <GridView.Columns>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Odp.Question}" Width="100">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader>
+                                        Słówko
+                                    </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Odp.CorrectAnswer}" Width="100">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader>
+                                        Prawidłowa odpowiedź
+                                    </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
             <Button Grid.Row="2" Height="20" Width="70" HorizontalAlignment="Center" Margin="5" Click="BackButton_Click">Wroć</Button>
         </Grid>
         <Grid Name="learningOver" Visibility="Hidden">
