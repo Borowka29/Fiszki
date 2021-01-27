@@ -19,7 +19,8 @@ namespace Fiszki
 {
     public abstract class Strategia
     {
-        //public int correctIndex;
+        public bool end;
+        public bool point;
         public abstract void play(MainWindow main, Word[] tabWords, int ktorePytanie);
         public abstract void check(string answer, MainWindow main);
         public abstract Answer GetQuestion();

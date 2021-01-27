@@ -32,7 +32,7 @@ namespace Fiszki
         {
             main.gameEasy.Visibility = Visibility.Visible;
             main.playEasyNextButton.Visibility = Visibility.Hidden;
-            main.colorChange(main);
+            main.colorChange();
             this.LeveOfDifficulty.play(main, tabWords,którePytanie);
             którePytanie++;
         }

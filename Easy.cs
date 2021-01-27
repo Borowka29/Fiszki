@@ -31,6 +31,11 @@ namespace Fiszki
 
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
+
+            main.gameEasy.Visibility = Visibility.Visible;
+            main.playEasyNextButton.Visibility = Visibility.Hidden;
+            main.previousQuestionEasy.Visibility = Visibility.Hidden;
+
             ktore = ktorePytanie;
             losuj();
             if (main.translationFromPolish == true)
@@ -105,8 +110,20 @@ namespace Fiszki
                     point = true;
             }
             userAnswer = answer;
-            //main.playEasyNextButton.Visibility = Visibility.Visible;
 
+            main.playEasyNextButton.Visibility = Visibility.Visible;
+            if (main.tryb == 2 && ktore > 0)
+                main.previousQuestionEasy.Visibility = Visibility.Visible;
+            if (ktore == 9)
+            {
+                main.playEasyNextButton.Content = "Koniec";
+                end = true;
+            }
+            else
+            {
+                main.playEasyNextButton.Content = "Dalej";
+                end = false;
+            }
         }
 
         public override Answer GetQuestion()
@@ -158,6 +175,11 @@ namespace Fiszki
                 main.answerEasy3.Background = Brushes.Blue;
 
             point = false;
+        }
+
+        public void showNumber(MainWindow main)
+        {
+            main.questionNumEasy.Content = "Pytanie " + (ktore + 1).ToString() + "/10";
         }
     }
 }

@@ -8,8 +8,9 @@ namespace Fiszki
 {
     public class TestMode
     {
-        private Answer Odp;
+        public bool end = false;
 
+        private Answer Odp;
         private List<Snapshot> Historia = new List<Snapshot>();
         private Pytanie Originator = new Pytanie(); //aktualne pytanie
         private int Current = -1;
@@ -22,7 +23,7 @@ namespace Fiszki
             rand = new Random();
             int ile = rand.Next(1, 2);
             int k = ile;
-            tabWords = new Word[4];
+            tabWords = new Word[10];
             LeveOfDifficulty = strategia;
 
             for (int i = 0; i < tabWords.Length; i++)
@@ -35,9 +36,7 @@ namespace Fiszki
         }
         public void DrowACard(MainWindow main)
         {
-            main.gameEasy.Visibility = Visibility.Visible;
-            main.playEasyNextButton.Visibility = Visibility.Hidden;
-            main.colorChange(main);
+            //main.colorChange();
             this.LeveOfDifficulty.play(main, tabWords, którePytanie);
             którePytanie++;
         }
@@ -46,8 +45,10 @@ namespace Fiszki
             if(Current == Historia.Count-1)//losuje pytanie
             {
                 this.LeveOfDifficulty.check(answer, main);
+                end = LeveOfDifficulty.end;
                 Odp = this.LeveOfDifficulty.GetQuestion();
                 this.ZapiszStan();
+
             }
             else//przechodzi do pytania po cofaniu się
             {
@@ -82,6 +83,7 @@ namespace Fiszki
              */
             this.LeveOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
         }
+
     }
     class Snapshot
     {
