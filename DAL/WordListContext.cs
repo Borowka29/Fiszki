@@ -12,8 +12,9 @@ namespace Fiszki.DAL
         public DbSet<Account> Account { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = WordList; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
-            //optionsBuilder.UseLazyLoadingProxies();
+            optionsBuilder.UseSqlServer(@"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = WordList; 
+                            Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False;
+                            ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
             base.OnConfiguring(optionsBuilder);
         }
     }
