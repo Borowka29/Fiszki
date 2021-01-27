@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 
 namespace Fiszki
 {
-    public class GreenDecorator : Decorator
+    public class GreenDecorator : Color
     {
         public override void changeColor(MainWindow main)
         {

@@ -12,12 +12,12 @@ namespace Fiszki
 
         private Answer Odp;
         public List<Snapshot> Historia { get; } = new List<Snapshot>();
-        private Pytanie Originator = new Pytanie(); //aktualne pytanie
+        private Question Originator = new Question(); //aktualne Question
         private int Current = -1;
-        private Strategia LeveOfDifficulty;
+        private Strategia LevelOfDifficulty;
         private Word[] tabWords { get; set; }
         private Random rand { get; set; }
-        private int którePytanie { get; set; }
+        private int któreQuestion { get; set; }
 
         public void setStrategia(Strategia strategia, List<Word> words)
         {
@@ -25,29 +25,29 @@ namespace Fiszki
             int ile = rand.Next(1, 2);
             int k = ile;
             tabWords = new Word[10];
-            LeveOfDifficulty = strategia;
+            LevelOfDifficulty = strategia;
 
             for (int i = 0; i < tabWords.Length; i++)
             {
                 tabWords[i] = words[k];
                 k = k + ile;
             }
-            którePytanie = 0;
+            któreQuestion = 0;
 
         }
         public void DrowACard(MainWindow main)
         {
-            //main.colorChange();
-            this.LeveOfDifficulty.play(main, tabWords, którePytanie);
-            którePytanie++;
+            LevelOfDifficulty.next(main);
+            this.LevelOfDifficulty.play(main, tabWords, któreQuestion);
+            któreQuestion++;
         }
         public void check(string answer, MainWindow main)
         {
-            if(Current == Historia.Count-1)//losuje pytanie
+            if(Current == Historia.Count-1)//losuje Question
             {
-                this.LeveOfDifficulty.check(answer, main);
-                end = LeveOfDifficulty.end;
-                Odp = this.LeveOfDifficulty.GetQuestion();
+                this.LevelOfDifficulty.check(answer, main);
+                end = LevelOfDifficulty.end;
+                Odp = this.LevelOfDifficulty.GetQuestion();
               //  this.ZapiszStan();
 
             }
@@ -55,7 +55,7 @@ namespace Fiszki
             {
                 Current++;
                 Originator.SetSnapshot(Historia[Current]);
-                this.LeveOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
+                this.LevelOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
             }
 
         }
@@ -75,8 +75,8 @@ namespace Fiszki
             }
 
 
-            którePytanie--;
-            this.LeveOfDifficulty.play(main, tabWords, Current);
+            któreQuestion--;
+            this.LevelOfDifficulty.play(main, tabWords, Current);
         }
 
     }
@@ -89,7 +89,7 @@ namespace Fiszki
         }
     }
 
-    class Pytanie
+    class Question
     {
         public Answer Odp { get; set; }
         public Snapshot CreateSnapshot(Answer Odpowiedzi)

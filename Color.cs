@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 
 namespace Fiszki
 {
-    public abstract class Decorator : Window
+    public abstract class Color : Window
     {
         public abstract void changeColor(MainWindow main);
     }

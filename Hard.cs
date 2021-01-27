@@ -24,16 +24,17 @@ namespace Fiszki
         public string correctAnswer;
         private string userAnswer;
         public int ktore { get; set; }
-        public bool point;
 
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
-            main.gameHard.Visibility = Visibility.Visible;
-            main.playHardNextButton.Visibility = Visibility.Hidden;
-            main.previousQuestionHard.Visibility = Visibility.Hidden;
+            main.answerHard.Text = "";                                //| przy kazdym nowym pytaniu zerujemy zawartosc TextBoxa na odpowiedz
+            main.gameHard.Visibility = Visibility.Visible;            //| grid Gry widoczny
+            main.playHardNextButton.Visibility = Visibility.Hidden;   //| przycisk "Dalej" niedostępny
+            main.previousQuestionHard.Visibility = Visibility.Hidden; //| przycisk "Cofnij" niedostepny
 
             ktore = ktorePytanie;
-            if (main.translationFromPolish == true)
+
+            if (main.translationFromPolish == true) // sprawdzenie kierunku tlumaczenia pl-ang
             {
                 this.question = tabWords[ktore].PolishVersion;
                 this.correctAnswer = tabWords[ktore].EnglishVersion;
@@ -44,48 +45,30 @@ namespace Fiszki
                 this.correctAnswer = tabWords[ktore].PolishVersion;
             }
 
-            main.gameHard.Visibility = Visibility.Visible;
-            main.playHardNextButton.Visibility = Visibility.Hidden;
-            main.colorChange();
 
-            main.questionHard.Content = question;
-            if (ktore == 9)
-            {
-                main.playHardNextButton.Content = "Koniec";
-            }
-                
-            else
-                main.playHardNextButton.Content = "Dalej";
+            main.questionHard.Content = question; // frontend - przypisanie slowka do przetlumaczenia
         }
 
         public override void check(string answer, MainWindow main)
         {
-            if (main.answerHard.Text == correctAnswer)
-            {
-                main.nextHard.Visibility = Visibility.Hidden;
+            if (main.answerHard.Text == correctAnswer) // jesli odpowiedz w TextBoxie = poprawnej odpowiedzi... <-- TU TRZEBA BREAKPOINT!
                 point = true;
-            }
             else
-            {
-                main.nextHard.Visibility = Visibility.Hidden;
-                main.correctAnswerHard.Visibility = Visibility.Visible;
-                main.correctAnswerHard.FontWeight = FontWeights.Bold;
-                main.correctAnswerHard.Foreground = Brushes.LightGreen;
                 point = false;
-            }
 
-            main.nextHard.Visibility = Visibility.Hidden;
-            main.playHardNextButton.Visibility = Visibility.Visible;
-            userAnswer = answer;
+            userAnswer = main.answerHard.Text; // zczytaj odpowiedz z TextBoxa (zeby zapisac do pamiatki)
 
-            if (main.tryb == 2 && ktore > 0)
+            if (main.tryb == 2) // jesli to test
             {
-                main.previousQuestionHard.Visibility = Visibility.Visible;
+                main.playHardNextButton.Visibility = Visibility.Visible; // odpowiedz zaznaczona, wiec mozna przejsc dalej: przycisk "Dalej"
 
-                if (ktore == 9)
+                if (ktore > 0) // jestesmy juz po pierwszym pytaniu wiec...
+                    main.previousQuestionHard.Visibility = Visibility.Visible; // ...mozna cofnac, wiec przycisk "Cofnij" widoczny
+
+                if (ktore == 9) // to ostatnie pytanie, nastepne bedzie przejscie do gridu gameOver
                 {
-                    main.playHardNextButton.Content = "Koniec";
-                    end = true;
+                    main.playHardNextButton.Content = "Koniec"; // zmiana napisu na przycisku "Dalej"
+                    end = true; // sygnal dla MainWindow
                 }
                 else
                 {
@@ -93,21 +76,19 @@ namespace Fiszki
                     end = false;
                 }
             }
-            else if (main.tryb == 1)
-                if (point == true)
+            else if (main.tryb == 1) // jesli nauka
+            {
+                if (point) // jesli odpowiedzielismy dobrze...
+                    main.playHardNextButton.Visibility = Visibility.Visible; // ...to przycisk "Dalej" jest widoczny
+                else // jesli odpowiemy zle...
+                    main.playHardNextButton.Visibility = Visibility.Hidden; // ...to przycisk "Dalej" znowu znika
+
+                if (ktore == 10) // jesli dotarlismy na koniec bazy
                 {
-                    if (point == true)
-                        main.playHardNextButton.Visibility = Visibility.Visible;
-                    else
-                        main.playHardNextButton.Visibility = Visibility.Hidden;
-
-                    if (ktore == 5)
-                    {
-                        main.learningOver.Visibility = Visibility.Visible;
-                        main.gameHard.Visibility = Visibility.Hidden;
-                    }
+                    main.learningOver.Visibility = Visibility.Visible; // wyswietlamy grida z info, ze to koniec Nauki
+                    main.gameHard.Visibility = Visibility.Hidden;      // wylaczamy grida z Nauką
                 }
-
+            }
         }
 
         public override Answer GetQuestion()
@@ -119,7 +100,7 @@ namespace Fiszki
             ktore = ktorePytanie;
             this.question = ans.Question;
             this.correctAnswer = ans.CorrectAnswer;
-            
+
 
             main.gameHard.Visibility = Visibility.Visible;
             main.playHardNextButton.Visibility = Visibility.Hidden;
@@ -134,6 +115,11 @@ namespace Fiszki
         public void showNumber(MainWindow main)
         {
             main.questionNumHard.Content = "Pytanie " + (ktore + 1).ToString() + "/10";
+        }
+
+        override public void next(MainWindow main)
+        {
+            main.playHardNextButton.Visibility = Visibility.Hidden;
         }
     }
 }

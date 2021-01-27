@@ -27,7 +27,6 @@ namespace Fiszki
         private int[] indexy;
         private Random rand { get; set; } = new Random();
         public int correctIndex;
-        public bool point;
 
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
@@ -141,13 +140,24 @@ namespace Fiszki
                 else
                     point = false;
             }
-            userAnswer = answer;
 
-                main.playMediumNextButton.Visibility = Visibility.Visible;
 
-            if (main.tryb == 2 && ktore > 0)
+            if (answer == "m1")
+                userAnswer = main.answerMedium1.Content.ToString();
+            else if (answer == "m2")
+                userAnswer = main.answerMedium2.Content.ToString();
+            else if (answer == "m3")
+                userAnswer = main.answerMedium3.Content.ToString();
+            else if (answer == "m4")
+                userAnswer = main.answerMedium4.Content.ToString();
+
+
+
+            if (main.tryb == 2)
             {
-                main.previousQuestionMedium.Visibility = Visibility.Visible;
+                main.playMediumNextButton.Visibility = Visibility.Visible; // "Dalej" staje się widoczny
+                if(ktore > 0)
+                    main.previousQuestionMedium.Visibility = Visibility.Visible; // "Cofnij" staje się widoczny
 
                 if (ktore == 9)
                 {
@@ -167,7 +177,7 @@ namespace Fiszki
                 {
                     main.playMediumNextButton.Visibility = Visibility.Visible;
 
-                    if (ktore == 3)
+                    if (ktore == 10)
                     {
                         main.learningOver.Visibility = Visibility.Visible;
                         main.gameMedium.Visibility = Visibility.Hidden;
@@ -175,8 +185,6 @@ namespace Fiszki
                 }
                 else
                     main.playMediumNextButton.Visibility = Visibility.Hidden;
-
-                
             }
 
         }
@@ -258,6 +266,11 @@ namespace Fiszki
         public void showNumber(MainWindow main)
         {
             main.questionNumMedium.Content = "Pytanie " + (ktore + 1).ToString() + "/10";
+        }
+
+        override public void next(MainWindow main)
+        {
+            main.playMediumNextButton.Visibility = Visibility.Hidden;
         }
     }
 }

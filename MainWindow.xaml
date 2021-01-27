@@ -264,7 +264,7 @@
         </Grid>
 
 
-        <Grid Name="gameHard" x:FieldModifier="public" Visibility="Hidden">
+        <Grid Name="gameHard" x:FieldModifier="public" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition/>
@@ -276,12 +276,10 @@
             <Label Name="questionHard" x:FieldModifier="public" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">xxx</Label>
             <Grid Grid.Row="2" Name="gameHardInside">
                 <TextBox Name="answerHard" x:FieldModifier="public" Width="250" Height="30" Margin="10" HorizontalAlignment="Left"></TextBox>
-                <Button Name="nextHard" x:FieldModifier="public" Width="70" Height="20" HorizontalAlignment="Right" Margin="10"
-                        Visibility="Visible">Sprawdź</Button>
+                <Button Name="nextHard" x:FieldModifier="public" Width="70" Height="20" HorizontalAlignment="Right" Margin="10,10,100,10"
+                        Visibility="Visible" Click="NextButton_Click">Sprawdź</Button>
                 <Button Name="playHardNextButton" x:FieldModifier="public" Width="70" Height="20" HorizontalAlignment="Right" Margin="10"
                         Visibility="Hidden" Click="NextButton_Click">Dalej</Button>
-                <Label Name="correctAnswerHard" x:FieldModifier="public" Width="70" Height="30" HorizontalAlignment="Right" Margin="10"
-                       Visibility="Hidden">XXX</Label>
             </Grid>
             <Button Name="playHardBackButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
                     Margin="10" Click="BackButton_Click">Wroć</Button>
