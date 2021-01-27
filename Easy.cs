@@ -21,7 +21,8 @@ namespace Fiszki
     {
         public string question;
         public string correctAnswer;
-        public string[] wrongAnswer =new string[2];
+        private string userAnswer;
+        public string[] wrongAnswer = new string[2];
         public int ktore { get; set; }
         private int[] indexy;
         private Random rand { get; set; } = new Random();
@@ -70,10 +71,10 @@ namespace Fiszki
             indexy = new int[2];
             do
             {
-                indexy[0]=this.rand.Next(0, 4);
+                indexy[0] = this.rand.Next(0, 4);
                 indexy[1] = this.rand.Next(0, 4);
 
-            } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore); 
+            } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore);
         }
         //
         public override void check(string answer, MainWindow main)
@@ -93,8 +94,60 @@ namespace Fiszki
                 if (answer == "e3")
                     point = true;
             }
+            userAnswer = answer;
             //main.playEasyNextButton.Visibility = Visibility.Visible;
 
+        }
+
+        public override Answer GetQuestion()
+        {
+            return new Answer(question, correctAnswer, wrongAnswer, userAnswer, correctIndex);
+        }
+
+        override public void ShowQuestion(MainWindow main, Answer ans, int ktorePytanie)
+        {
+            ktore = ktorePytanie;
+
+            this.question = ans.Question;
+            this.correctAnswer = ans.CorrectAnswer;
+
+            main.questionEasy.Content = question;
+
+            correctIndex = ans.correctIndex;
+
+            if (correctIndex == 0)
+            {
+                main.answerEasy1.Content = ans.CorrectAnswer;
+                main.answerEasy2.Content = ans.AdditionalAnswers[0];
+                main.answerEasy3.Content = ans.AdditionalAnswers[1];
+            }
+
+            else if (correctIndex == 1)
+            {
+                main.answerEasy2.Content = ans.CorrectAnswer;
+                main.answerEasy1.Content = ans.AdditionalAnswers[0];
+                main.answerEasy3.Content = ans.AdditionalAnswers[1];
+            }
+
+            else if (correctIndex == 2)
+            {
+                main.answerEasy3.Content = ans.CorrectAnswer;
+                main.answerEasy1.Content = ans.AdditionalAnswers[0];
+                main.answerEasy2.Content = ans.AdditionalAnswers[1];
+            }
+
+            //ans.UserAnswer - zaznaczyć button ; nie wiem czy dobrze
+            main.answerEasy1.Background = Brushes.White;
+            main.answerEasy2.Background = Brushes.White;
+            main.answerEasy3.Background = Brushes.White;
+            if (ans.UserAnswer == "e1")
+                main.answerEasy1.Background = Brushes.Blue;
+            else if (ans.UserAnswer == "e2")
+                main.answerEasy2.Background = Brushes.Blue;
+            else if (ans.UserAnswer == "e3")
+                main.answerEasy3.Background = Brushes.Blue;
+
+            point = false;
         }
     }
 }

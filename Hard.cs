@@ -22,6 +22,7 @@ namespace Fiszki
     {
         public string question;
         public string correctAnswer;
+        private string userAnswer;
         public int ktore { get; set; }
         public bool point;
 
@@ -58,6 +59,28 @@ namespace Fiszki
 
             main.nextHard.Visibility = Visibility.Hidden;
             main.playHardNextButton.Visibility = Visibility.Visible;
+            userAnswer = answer;
+        }
+
+        public override Answer GetQuestion()
+        {
+            return new Answer(question, correctAnswer, null, userAnswer, 0);
+        }
+        override public void ShowQuestion(MainWindow main, Answer ans, int ktorePytanie)
+        {
+            ktore = ktorePytanie;
+            this.question = ans.Question;
+            this.correctAnswer = ans.CorrectAnswer;
+            
+
+            main.gameHard.Visibility = Visibility.Visible;
+            main.playHardNextButton.Visibility = Visibility.Hidden;
+            main.colorChange(main);
+
+            main.questionHard.Content = question;
+
+            //ans.UserAnswer - wpisać 
+            main.answerHard.Text = ans.UserAnswer;
         }
     }
 }

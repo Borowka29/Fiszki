@@ -10,8 +10,8 @@ namespace Fiszki
     {
         private Answer Odp;
 
-        private List<Snapshot> Historia;
-        private Pytanie Originator; //aktualne pytanie
+        private List<Snapshot> Historia = new List<Snapshot>();
+        private Pytanie Originator = new Pytanie(); //aktualne pytanie
         private int Current = -1;
         private Strategia LeveOfDifficulty;
         private Word[] tabWords { get; set; }
@@ -41,10 +41,25 @@ namespace Fiszki
             this.LeveOfDifficulty.play(main, tabWords, którePytanie);
             którePytanie++;
         }
+        public void check(string answer, MainWindow main)
+        {
+            if(Current == Historia.Count-1)//losuje pytanie
+            {
+                this.LeveOfDifficulty.check(answer, main);
+                Odp = this.LeveOfDifficulty.GetQuestion();
+                this.ZapiszStan();
+            }
+            else//przechodzi do pytania po cofaniu się
+            {
+                Current++;
+                Originator.SetSnapshot(Historia[Current]);
+                this.LeveOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
+            }
+
+        }
         public void NextQuestion()
         {
             this.ZapiszStan();
-            //losowanie pytania
         }
 
         public void ZapiszStan()
@@ -53,13 +68,19 @@ namespace Fiszki
             Current++;
         }
 
-        public void Cofnij()
+        public void Cofnij(MainWindow main)
         {
             if (Current > 0)
             {
                 Originator.SetSnapshot(Historia[Current]);
                 Current--;
             }
+            /*
+             * ogólnie działa ale nie wiem jak dodać przycisk żeby cofać
+             * i jak potem zmienić żeby dało się zmieniać odpowiedzi
+             * i żeby znowu pojawiał się przycisk dalej
+             */
+            this.LeveOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
         }
     }
     class Snapshot
@@ -73,7 +94,7 @@ namespace Fiszki
 
     class Pytanie
     {
-        private Answer Odp;
+        public Answer Odp { get; set; }
         public Snapshot CreateSnapshot(Answer Odpowiedzi)
         {
             return new Snapshot(Odpowiedzi);

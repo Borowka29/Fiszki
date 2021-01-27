@@ -21,6 +21,7 @@ namespace Fiszki
     {
         public string question;
         public string correctAnswer;
+        private string userAnswer;
         public string[] wrongAnswer = new string[3];
         public int ktore { get; set; }
         private int[] indexy;
@@ -128,8 +129,82 @@ namespace Fiszki
                 if (answer == "m4")
                     point = true;
             }
+            userAnswer = answer;
 
             main.playMediumNextButton.Visibility = Visibility.Visible;
+        }
+
+        public override Answer GetQuestion()
+        {
+            return new Answer(question, correctAnswer, wrongAnswer, userAnswer, correctIndex);
+        }
+        override public void ShowQuestion(MainWindow main, Answer ans, int ktorePytanie)
+        {
+            ktore = ktorePytanie;
+
+            this.question = ans.Question;
+            this.correctAnswer = ans.CorrectAnswer;
+
+            main.gameMedium.Visibility = Visibility.Visible;
+            main.playMediumNextButton.Visibility = Visibility.Hidden;
+            main.colorChange(main);
+
+            main.questionEasy.Content = question;
+            main.questionMedium.Content = question;
+
+            correctIndex = ans.correctIndex;
+
+            if (correctIndex == 0)
+            {
+                main.answerMedium1.Content = ans.CorrectAnswer;
+
+                main.answerMedium2.Content = ans.AdditionalAnswers[0];
+                main.answerMedium3.Content = ans.AdditionalAnswers[1];
+                main.answerMedium4.Content = ans.AdditionalAnswers[2];
+            }
+
+            else if (correctIndex == 1)
+            {
+                main.answerMedium2.Content = ans.CorrectAnswer;
+
+                main.answerMedium1.Content = ans.AdditionalAnswers[0];
+                main.answerMedium3.Content = ans.AdditionalAnswers[1];
+                main.answerMedium4.Content = ans.AdditionalAnswers[2];
+            }
+
+            else if (correctIndex == 2)
+            {
+                main.answerMedium3.Content = ans.CorrectAnswer;
+
+                main.answerMedium1.Content = ans.AdditionalAnswers[0];
+                main.answerMedium2.Content = ans.AdditionalAnswers[1];
+                main.answerMedium4.Content = ans.AdditionalAnswers[2];
+            }
+
+            else if (correctIndex == 3)
+            {
+                main.answerMedium4.Content = ans.CorrectAnswer;
+
+                main.answerMedium1.Content = ans.AdditionalAnswers[0];
+                main.answerMedium2.Content = ans.AdditionalAnswers[1];
+                main.answerMedium3.Content = ans.AdditionalAnswers[2];
+            }
+
+            //ans.UserAnswer - zaznaczyć button 
+            main.answerMedium1.Background = Brushes.White;
+            main.answerMedium2.Background = Brushes.White;
+            main.answerMedium3.Background = Brushes.White;
+            main.answerMedium4.Background = Brushes.White;
+            if (ans.UserAnswer == "m1")
+                main.answerMedium1.Background = Brushes.Blue;
+            else if (ans.UserAnswer == "m2")
+                main.answerMedium2.Background = Brushes.Blue;
+            else if (ans.UserAnswer == "m3")
+                main.answerMedium3.Background = Brushes.Blue;
+            else if (ans.UserAnswer == "m4")
+                main.answerMedium4.Background = Brushes.Blue;
+
+            point = false;
         }
     }
 }

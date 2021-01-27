@@ -177,7 +177,10 @@ namespace Fiszki
             }
 
             start.Visibility = Visibility.Hidden;
-            learningMode.DrowACard(this);
+            if (tryb == 1)
+                learningMode.DrowACard(this);
+            else
+                testMode.DrowACard(this);
         }
 
         private void answer_Click(object sender, RoutedEventArgs e)
@@ -185,22 +188,45 @@ namespace Fiszki
             
             if (playEasyNextButton.Visibility == Visibility.Hidden)
             {
-                if (sender == answerEasy1)
-                    learningMode.check("e1", this);
-                else if (sender == answerEasy2)
-                    learningMode.check("e2", this);
-                else if (sender == answerEasy3)
-                    learningMode.check("e3", this);
-                else if (sender == answerMedium1)
-                    learningMode.check("m1", this);
-                else if (sender == answerMedium2)
-                    learningMode.check("m2", this);
-                else if (sender == answerMedium3)
-                    learningMode.check("m3", this);
-                else if (sender == answerMedium4)
-                    learningMode.check("m4", this);
-                else if (sender == answerHard)
-                    learningMode.check("h", this);
+                if (tryb == 1)
+                {
+                    if (sender == answerEasy1)
+                        learningMode.check("e1", this);
+                    else if (sender == answerEasy2)
+                        learningMode.check("e2", this);
+                    else if (sender == answerEasy3)
+                        learningMode.check("e3", this);
+                    else if (sender == answerMedium1)
+                        learningMode.check("m1", this);
+                    else if (sender == answerMedium2)
+                        learningMode.check("m2", this);
+                    else if (sender == answerMedium3)
+                        learningMode.check("m3", this);
+                    else if (sender == answerMedium4)
+                        learningMode.check("m4", this);
+                    else if (sender == answerHard)
+                        learningMode.check("h", this);
+                }
+                else
+                {
+                    if (sender == answerEasy1)
+                        testMode.check("e1", this);
+                    else if (sender == answerEasy2)
+                        testMode.check("e2", this);
+                    else if (sender == answerEasy3)
+                        testMode.check("e3", this);
+                    else if (sender == answerMedium1)
+                        testMode.check("m1", this);
+                    else if (sender == answerMedium2)
+                        testMode.check("m2", this);
+                    else if (sender == answerMedium3)
+                        testMode.check("m3", this);
+                    else if (sender == answerMedium4)
+                        testMode.check("m4", this);
+                    else if (sender == answerHard)
+                        testMode.check("h", this);
+                }
+                    
             }
 
         }
@@ -220,6 +246,11 @@ namespace Fiszki
             if(tryb==1 && learningMode.którePytanie<4)
             {
                 learningMode.DrowACard(this);
+
+            }
+            if (tryb != 1)
+            {
+                testMode.DrowACard(this);
 
             }
         }
