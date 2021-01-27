@@ -264,7 +264,7 @@
         </Grid>
 
 
-        <Grid Name="gameHard" x:FieldModifier="public" Visibility="Visible">
+        <Grid Name="gameHard" x:FieldModifier="public" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition/>
@@ -307,6 +307,13 @@
                                 </GridViewColumn.Header>
                             </GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding Path=Odp.CorrectAnswer}" Width="100">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader>
+                                        Prawidłowa odpowiedź
+                                    </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Odp.UserAnswer}" Width="100">
                                 <GridViewColumn.Header>
                                     <GridViewColumnHeader>
                                         Prawidłowa odpowiedź

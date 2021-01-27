@@ -41,7 +41,6 @@ namespace Fiszki
         public int tryb; //1- nauka, 2-test
 
         public bool translationFromPolish;  // true - tlumaczy pl->ang;      false - tlumaczy ang->pl
-        private int i;                      // zmienna pomocnicza do tlumaczen
 
         public MainWindow()
         {
@@ -349,6 +348,7 @@ namespace Fiszki
 
         private void Btn1_Checked(object sender, RoutedEventArgs e) // zmiana kierunku tlumaczenia pl-ang
         {
+            int i = 1;
             if (i != 1)
             {
                 if (angpol.IsChecked == true) translationFromPolish = false;
