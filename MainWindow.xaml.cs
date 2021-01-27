@@ -23,25 +23,25 @@ namespace Fiszki
     /// </summary>
     public partial class MainWindow : Window
     {
-        private double difficult { get; set; }
-        public int color { get; set; } 
-        private string[] colorList = { "szary", "różowy", "niebieski", "zielony", "paskudny" };
+        private double difficult { get; set; } //tymczasowy poziom trudnosci
+        public int color { get; set; } // tymczasowy uklad kolorystyczny
+        private string[] colorList = { "szary", "różowy", "niebieski", "zielony", "paskudny" }; //lista kolorow do combo boxa
 
-        private Baza Baza { get; set; }
-        public Account User { get; set; }
-        private static LearningMode learningMode { get; set; }
-        private static TestMode testMode { get; set; }
-        public Decorator decorator;
-        public List<Word> ListOfWords { get; set; }
+        private Baza Baza { get; set; } // baza slowek i uzytkownikow
+        public Account User { get; set; } // obecnie zalogowany uzytkownik
+        private static LearningMode learningMode { get; set; } // obiekt trybu NAUKA
+        private static TestMode testMode { get; set; }         // obiekt trybu TEST
+        public Color decorator; // abstrakcyjny dekorator (bedzie potem przypisany w funkcji colorChange()
+        public List<Word> ListOfWords { get; set; } // przepisana na tymczasowo baza slowek
 
-        private bool succesfullAddWord;
-        private bool succesfullEditWord;
-        private Word EditWord;
+        private bool succesfullAddWord; // ???
+        private bool succesfullEditWord;// ???
+        private Word EditWord;          // ???
 
         public int tryb; //1- nauka, 2-test
 
-        public bool translationFromPolish;
-        int i = 1;
+        public bool translationFromPolish;  // true - tlumaczy pl->ang;      false - tlumaczy ang->pl
+        private int i;                      // zmienna pomocnicza do tlumaczen
 
         public MainWindow()
         {
@@ -63,14 +63,14 @@ namespace Fiszki
              * 3. hard
              */
 
-            difficult = difficultSetter.Value;
-            User.LevelHard = difficult;
+            difficult = difficultSetter.Value;  //|    zczytanie wartosci z settera do zmiennej tymczasowej
+            User.LevelHard = difficult;         //|    przekazanie wartości tymczasowej do bazy danych (przypisanie do uzytkownika)
         }
 
         private void colorSetter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            colorChange();
-            User.Color = color;
+            colorChange();      //| ponowne uruchomienie klasy zarządzającej dekoratorami
+            User.Color = color; //| wpisanie nowego koloru do bazy (przypisanie do uzytkownika)
         }
 
         public void colorChange()
@@ -111,53 +111,60 @@ namespace Fiszki
 
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+
+
+
+        private void BackButton_Click(object sender, RoutedEventArgs e) // cofnięcie się z dowolnego grida do menu
         {
-            menu.Visibility = Visibility.Visible;
-            changeDatabaseWords.Visibility = Visibility.Hidden;
+            menu.Visibility = Visibility.Visible;                   //| jedyny grid, ktory bedzie widoczny po cofnieciu sie do menu
+            changeDatabaseWords.Visibility = Visibility.Hidden;     //| cala reszta ukryta     
             settings.Visibility = Visibility.Hidden;
             gameOver.Visibility = Visibility.Hidden;
             start.Visibility = Visibility.Hidden;
+            learningOver.Visibility = Visibility.Hidden;
 
             gameEasy.Visibility = Visibility.Hidden;
             gameMedium.Visibility = Visibility.Hidden;
             gameHard.Visibility = Visibility.Hidden;
         }
 
-        private void startButton_Click(object sender, RoutedEventArgs e)
+        private void startButton_Click(object sender, RoutedEventArgs e) // przjeście z menu do gridu z wyborem trybu
         {
             menu.Visibility = Visibility.Hidden;
             start.Visibility = Visibility.Visible;
         }
 
-        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        private void settingsButton_Click(object sender, RoutedEventArgs e) // przjeście z menu do gridu z ustawieniami
         {
             menu.Visibility = Visibility.Hidden;
             settings.Visibility = Visibility.Visible;
         }
 
-        private void changeDatabaseWords_Click(object sender, RoutedEventArgs e)
+        private void changeDatabaseWords_Click(object sender, RoutedEventArgs e) // przjeście z menu do gridu z bazą słówek
         {
             menu.Visibility = Visibility.Hidden;
             changeDatabaseWords.Visibility = Visibility.Visible;
         }
 
-        private void quitButton_Click(object sender, RoutedEventArgs e)
+        private void quitButton_Click(object sender, RoutedEventArgs e) // wyjscie z aplikacji
         {
-            Baza.updateDataUser(User.Id, difficult, color);
+            Baza.updateDataUser(User.Id, difficult, color); // update bazy, zeby po ponownym otwarciu przywrocilo obecne ustawienia
             Close();
         }
 
-        private void Start_Click(object sender, RoutedEventArgs e)
+
+
+
+        private void Start_Click(object sender, RoutedEventArgs e)  // przejscie z gridu Start do wlasciwej Gry(Nauka/Test)
         {
-            if (sender == naukaButton)
+            if (sender == naukaButton) // zaczynamy nauke, wiec nr pytan sa niepotrzebne
             {
                 tryb = 1;
                 questionNumEasy.Visibility = Visibility.Hidden;
                 questionNumMedium.Visibility = Visibility.Hidden;
                 questionNumHard.Visibility = Visibility.Hidden;
             }
-            else
+            else // zaczynamy tst, wiec nr pytan sa potrzebne
             {
                 tryb = 2;
                 questionNumEasy.Visibility = Visibility.Visible;
@@ -165,40 +172,44 @@ namespace Fiszki
                 questionNumHard.Visibility = Visibility.Visible;
             }
 
-            switch (difficult)
+            switch (difficult) // PRZYPISANIE STRATEGII
             {
-                case 0:
-                    if(tryb==1)  learningMode.setStrategia(new Easy(),Baza.getListWord());
-                    else testMode.setStrategia(new Easy(), Baza.getListWord());
+                case 0: // easy
+                    if(tryb==1)  
+                        learningMode.setStrategia(new Easy(),Baza.getListWord());
+                    else 
+                        testMode.setStrategia(new Easy(), Baza.getListWord());
                     break;
 
-                case 1:
-                    if (tryb == 1) learningMode.setStrategia(new Medium(), Baza.getListWord());
-                    else testMode.setStrategia(new Medium(), Baza.getListWord());
+                case 1: // medium
+                    if (tryb == 1) 
+                        learningMode.setStrategia(new Medium(), Baza.getListWord());
+                    else 
+                        testMode.setStrategia(new Medium(), Baza.getListWord());
                     break;
 
-                case 2:
-                    if (tryb == 1) learningMode.setStrategia(new Hard(), Baza.getListWord());
-                    else testMode.setStrategia(new Hard(), Baza.getListWord());
+                case 2: // hard
+                    if (tryb == 1) 
+                        learningMode.setStrategia(new Hard(), Baza.getListWord());
+                    else 
+                        testMode.setStrategia(new Hard(), Baza.getListWord());
                     break;
             }
 
-            start.Visibility = Visibility.Hidden;
+            start.Visibility = Visibility.Hidden; // schowanie gridu Start
             if (tryb == 1)
-                learningMode.DrowACard(this);
+                learningMode.DrowACard(this); // wlaczenie gridu i odpalenie Nauki
             else
-                testMode.DrowACard(this);
+                testMode.DrowACard(this);     // wlaczenie gridu i odpalenie Testu
         }
 
-        private void answer_Click(object sender, RoutedEventArgs e)
+        private void answer_Click(object sender, RoutedEventArgs e) // klikniecie ktorejs odpowiedzi lub "sprawdz" w trybie hard
         {
             
-            if (playEasyNextButton.Visibility == Visibility.Hidden)
-            {
                 string senderString = null;
 
-                if (sender == answerEasy1)
-                    senderString = "e1";
+                if (sender == answerEasy1) // zmiana sendera (klasa: object) na string [bo jak wysle sender do funkcji, to w funckji juz
+                    senderString = "e1";   //                      nie wie, ze to klasa button, czyli klasa dziedziczaca z klasy object]
                 else if (sender == answerEasy2)
                     senderString = "e2";
                 else if (sender == answerEasy3)
@@ -211,56 +222,51 @@ namespace Fiszki
                     senderString = "m3";
                 else if (sender == answerMedium4)
                     senderString = "m4";
-                else if (sender == answerHard)
+                else if (sender == nextHard)
                     senderString = "h";
+
 
                 if (tryb == 1)
                     learningMode.check(senderString, this);
                 else
-                {
                     testMode.check(senderString, this);
-                }
-                    
-                    
-            }
-
         }
 
-        private void NextButton_Click(object sender, RoutedEventArgs e)
+        private void NextButton_Click(object sender, RoutedEventArgs e) // klikniecie przycisku "dalej" w Nauce/Tescie
         {
-            if(testMode.end)
+            if (testMode.end)   // koniec testu
             {
-                gameEasy.Visibility = Visibility.Hidden;
+                gameEasy.Visibility = Visibility.Hidden; // niezaleznie od poziomu zamykamy Test
                 gameMedium.Visibility = Visibility.Hidden;
                 gameHard.Visibility = Visibility.Hidden;
 
-                gameOver.Visibility = Visibility.Visible;
+                gameOver.Visibility = Visibility.Visible; // pokazujemy widok Konca Testu
+
+                TestAnwers.ItemsSource=testMode.Historia;   // TO CHYBA TRZEBA BEDZIE WYRZUCIC I WSTAWIC WYNIK
 
                 return;
             }
 
-            if (sender == playEasyNextButton)
-                playEasyNextButton.Visibility = Visibility.Hidden;
-            else if (sender == playMediumNextButton)
-                playMediumNextButton.Visibility = Visibility.Hidden;
-            else if (sender == playHardNextButton)
-            {
-                playHardNextButton.Visibility = Visibility.Hidden;
-                nextHard.Visibility = Visibility.Visible;
-            }
-            if(tryb==1 && learningMode.którePytanie<4)
+            if (tryb==1 && sender!=nextHard)
             {
                 learningMode.DrowACard(this);
 
             }
-            if (tryb == 2)
+            if (tryb == 2 && sender!=nextHard)
             {
-                testMode.DrowACard(this);
-
+                testMode.ZapiszStan();
+                testMode.DrowACard(this); 
             }
         }
 
-        private void Zaloguj_Click(object sender, RoutedEventArgs e)
+        private void Previous_Click(object sender, RoutedEventArgs e) // cofanie (pamiatka) w tescie
+        {
+            testMode.Cofnij(this);
+        }
+
+
+
+        private void Zaloguj_Click(object sender, RoutedEventArgs e) // logowanie
         {
             userLogin.ClearValue(TextBox.BorderBrushProperty);
             userPassword.ClearValue(TextBox.BorderBrushProperty);
@@ -304,13 +310,13 @@ namespace Fiszki
             return;
         }
 
-        private void Rejestracja_Click(object sender, RoutedEventArgs e)
+        private void Rejestracja_Click(object sender, RoutedEventArgs e) // rejstracja
         {
             Login.Visibility = Visibility.Collapsed;
             Rejestracja.Visibility = Visibility.Visible;
         }
 
-        private void RejestracjaOK_Click(object sender, RoutedEventArgs e)
+        private void RejestracjaOK_Click(object sender, RoutedEventArgs e) // ?????????
         {
             bool udałoSie = false;
             Account NewUser = new Account();
@@ -338,7 +344,10 @@ namespace Fiszki
             }
         }
 
-        private void Btn1_Checked(object sender, RoutedEventArgs e)
+
+
+
+        private void Btn1_Checked(object sender, RoutedEventArgs e) // zmiana kierunku tlumaczenia pl-ang
         {
             if (i != 1)
             {
@@ -349,13 +358,13 @@ namespace Fiszki
 
         }
 
-        private void Refresh()
+        private void Refresh() // update bazy danych
         {
             ListOfWords = Baza.getListWordLocal();
             WordsListView.ItemsSource = ListOfWords;
         }
 
-        private void DodajButton_Click(object sender, RoutedEventArgs e)
+        private void DodajButton_Click(object sender, RoutedEventArgs e) // odpalenie grida AddWord
         {
             changeDatabaseWords.Visibility = Visibility.Hidden;
             CreateWords.Visibility = Visibility.Visible;
@@ -366,7 +375,7 @@ namespace Fiszki
             }
         }
 
-        private void EdytujButton_Click(object sender, RoutedEventArgs e)
+        private void EdytujButton_Click(object sender, RoutedEventArgs e) // odpalenie grida EditWord
         {
             EditWord = WordsListView.SelectedItem as Word;
             polishTranslationEdit.Text = EditWord.PolishVersion;
@@ -380,7 +389,7 @@ namespace Fiszki
             }
         }
 
-        private void UsuńButton_Click(object sender, RoutedEventArgs e)
+        private void UsuńButton_Click(object sender, RoutedEventArgs e) // usuwanie slow w bazie
         {
             Word word = WordsListView.SelectedItem as Word;
             if (word != null)
@@ -390,7 +399,7 @@ namespace Fiszki
             }
         }
 
-        private void KategorieListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void KategorieListView_SelectionChanged(object sender, SelectionChangedEventArgs e) // wybor slowa z listy
         {
             if (WordsListView.SelectedItem != null)
             {
@@ -404,7 +413,7 @@ namespace Fiszki
             }
         }
 
-        private void AddWordButton_Click(object sender, RoutedEventArgs e)
+        private void AddWordButton_Click(object sender, RoutedEventArgs e) // dodawanie slowa do bazy
         {
             if (!string.IsNullOrEmpty(polishTranslation.Text) && !string.IsNullOrEmpty(englishTranslation.Text))
             {
@@ -418,13 +427,13 @@ namespace Fiszki
             }
         }
 
-        private void CancelAddWordButton_Click(object sender, RoutedEventArgs e)
+        private void CancelAddWordButton_Click(object sender, RoutedEventArgs e) // cofnij dodawanie slowa do bazy
         {
             changeDatabaseWords.Visibility = Visibility.Visible;
             CreateWords.Visibility = Visibility.Hidden;
         }
 
-        private void EditWordButton_Click(object sender, RoutedEventArgs e)
+        private void EditWordButton_Click(object sender, RoutedEventArgs e) // edytowanie slowa w bazie
         {
             if (!string.IsNullOrEmpty(polishTranslationEdit.Text) && !string.IsNullOrEmpty(englishTranslationEdit.Text))
             {
@@ -438,15 +447,10 @@ namespace Fiszki
             }
         }
 
-        private void CancelEditWordButton_Click(object sender, RoutedEventArgs e)
+        private void CancelEditWordButton_Click(object sender, RoutedEventArgs e) // cofnij edycje
         {
             changeDatabaseWords.Visibility = Visibility.Visible;
             EditWords.Visibility = Visibility.Hidden;
-        }
-
-        private void Previous_Click(object sender, RoutedEventArgs e)
-        {
-            testMode.Cofnij(this);
         }
     }
 }

@@ -27,7 +27,6 @@ namespace Fiszki
         private int[] indexy;
         private Random rand { get; set; } = new Random();
         public int correctIndex;
-        public bool point;
 
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
@@ -117,37 +116,77 @@ namespace Fiszki
             {
                 if (answer == "m1")
                     point = true;
+                else
+                    point = false;
             }
             else if (correctIndex == 1)
             {
                 if (answer == "m2")
                     point = true;
+                else
+                    point = false;
             }
             else if (correctIndex == 2)
             {
                 if (answer == "m3")
                     point = true;
+                else
+                    point = false;
             }
             else if (correctIndex == 3)
             {
                 if (answer == "m4")
                     point = true;
+                else
+                    point = false;
             }
-            userAnswer = answer;
 
-                main.playMediumNextButton.Visibility = Visibility.Visible;
-            if (main.tryb == 2 && ktore > 0)
-                main.previousQuestionMedium.Visibility = Visibility.Visible;
-            if (ktore == 9)
+
+            if (answer == "m1")
+                userAnswer = main.answerMedium1.Content.ToString();
+            else if (answer == "m2")
+                userAnswer = main.answerMedium2.Content.ToString();
+            else if (answer == "m3")
+                userAnswer = main.answerMedium3.Content.ToString();
+            else if (answer == "m4")
+                userAnswer = main.answerMedium4.Content.ToString();
+
+
+
+            if (main.tryb == 2)
             {
-                main.playMediumNextButton.Content = "Koniec";
-                end = true;
+                main.playMediumNextButton.Visibility = Visibility.Visible; // "Dalej" staje się widoczny
+                if(ktore > 0)
+                    main.previousQuestionMedium.Visibility = Visibility.Visible; // "Cofnij" staje się widoczny
+
+                if (ktore == 9)
+                {
+                    main.playMediumNextButton.Content = "Koniec";
+                    end = true;
+                }
+                else
+                {
+                    main.playMediumNextButton.Content = "Dalej";
+                    end = false;
+                }
             }
-            else
+
+            else if (main.tryb == 1)
             {
-                main.playMediumNextButton.Content = "Dalej";
-                end = false;
+                if (point == true)
+                {
+                    main.playMediumNextButton.Visibility = Visibility.Visible;
+
+                    if (ktore == 10)
+                    {
+                        main.learningOver.Visibility = Visibility.Visible;
+                        main.gameMedium.Visibility = Visibility.Hidden;
+                    }
+                }
+                else
+                    main.playMediumNextButton.Visibility = Visibility.Hidden;
             }
+
         }
 
         public override Answer GetQuestion()
@@ -156,7 +195,7 @@ namespace Fiszki
         }
         override public void ShowQuestion(MainWindow main, Answer ans, int ktorePytanie)
         {
-            ktore = ktorePytanie;
+            //ktore = ktorePytanie;
 
             this.question = ans.Question;
             this.correctAnswer = ans.CorrectAnswer;
@@ -205,7 +244,7 @@ namespace Fiszki
                 main.answerMedium2.Content = ans.AdditionalAnswers[1];
                 main.answerMedium3.Content = ans.AdditionalAnswers[2];
             }
-
+            /*
             //ans.UserAnswer - zaznaczyć button 
             main.answerMedium1.Background = Brushes.White;
             main.answerMedium2.Background = Brushes.White;
@@ -219,6 +258,7 @@ namespace Fiszki
                 main.answerMedium3.Background = Brushes.Blue;
             else if (ans.UserAnswer == "m4")
                 main.answerMedium4.Background = Brushes.Blue;
+            */
 
             point = false;
         }
@@ -226,6 +266,11 @@ namespace Fiszki
         public void showNumber(MainWindow main)
         {
             main.questionNumMedium.Content = "Pytanie " + (ktore + 1).ToString() + "/10";
+        }
+
+        override public void next(MainWindow main)
+        {
+            main.playMediumNextButton.Visibility = Visibility.Hidden;
         }
     }
 }

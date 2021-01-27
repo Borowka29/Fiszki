@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 
 namespace Fiszki
 {
-    public class PinkDecorator : Decorator
+    public class PinkDecorator : Color
     {
         public override void changeColor(MainWindow main)
         {

@@ -8,7 +8,7 @@ namespace Fiszki
 {
     public class LearningMode
     {
-        public Strategia LeveOfDifficulty { get; set; }
+        public Strategia LevelOfDifficulty { get; set; }
         private Word[] tabWords { get; set; }
         private Random rand { get; set; }
         public int którePytanie { get; set; }
@@ -17,10 +17,10 @@ namespace Fiszki
             rand = new Random();
             int ile = rand.Next(1, 2);
             int k = ile;
-            tabWords = new Word[4];
-            LeveOfDifficulty = strategia;
+            tabWords = new Word[12];
+            LevelOfDifficulty = strategia;
 
-            for(int i = 0; i < 4; i++)
+            for(int i = 0; i < 12; i++)
             {
                 tabWords[i] = words[k];
                 k = k + ile;
@@ -30,15 +30,24 @@ namespace Fiszki
         }
         public void DrowACard(MainWindow main)
         {
-            main.gameEasy.Visibility = Visibility.Visible;
-            main.playEasyNextButton.Visibility = Visibility.Hidden;
-            main.colorChange();
-            this.LeveOfDifficulty.play(main, tabWords,którePytanie);
-            którePytanie++;
+            LevelOfDifficulty.next(main);
+            if (którePytanie < tabWords.Length)
+            {
+                którePytanie++;
+
+                this.LevelOfDifficulty.play(main, tabWords,którePytanie);
+            }
+            else
+            {
+
+                main.learningOver.Visibility = Visibility.Visible;
+                main.gameMedium.Visibility = Visibility.Hidden;
+            }
+
         }
         public void check(string answer, MainWindow main)
         {
-            this.LeveOfDifficulty.check(answer, main);
+            this.LevelOfDifficulty.check(answer, main);
         }
     }
 }

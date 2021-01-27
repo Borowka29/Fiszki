@@ -11,56 +11,53 @@ namespace Fiszki
         public bool end = false;
 
         private Answer Odp;
-        private List<Snapshot> Historia = new List<Snapshot>();
-        private Pytanie Originator = new Pytanie(); //aktualne pytanie
+        public List<Snapshot> Historia { get; } = new List<Snapshot>();
+        private Question Originator = new Question(); //aktualne Question
         private int Current = -1;
-        private Strategia LeveOfDifficulty;
+        private Strategia LevelOfDifficulty;
         private Word[] tabWords { get; set; }
         private Random rand { get; set; }
-        private int którePytanie { get; set; }
+        private int któreQuestion { get; set; }
+
         public void setStrategia(Strategia strategia, List<Word> words)
         {
             rand = new Random();
             int ile = rand.Next(1, 2);
             int k = ile;
             tabWords = new Word[10];
-            LeveOfDifficulty = strategia;
+            LevelOfDifficulty = strategia;
 
             for (int i = 0; i < tabWords.Length; i++)
             {
                 tabWords[i] = words[k];
                 k = k + ile;
             }
-            którePytanie = 0;
+            któreQuestion = 0;
 
         }
         public void DrowACard(MainWindow main)
         {
-            //main.colorChange();
-            this.LeveOfDifficulty.play(main, tabWords, którePytanie);
-            którePytanie++;
+            LevelOfDifficulty.next(main);
+            this.LevelOfDifficulty.play(main, tabWords, któreQuestion);
+            któreQuestion++;
         }
         public void check(string answer, MainWindow main)
         {
-            if(Current == Historia.Count-1)//losuje pytanie
+            if(Current == Historia.Count-1)//losuje Question
             {
-                this.LeveOfDifficulty.check(answer, main);
-                end = LeveOfDifficulty.end;
-                Odp = this.LeveOfDifficulty.GetQuestion();
-                this.ZapiszStan();
+                this.LevelOfDifficulty.check(answer, main);
+                end = LevelOfDifficulty.end;
+                Odp = this.LevelOfDifficulty.GetQuestion();
+              //  this.ZapiszStan();
 
             }
             else//przechodzi do pytania po cofaniu się
             {
                 Current++;
                 Originator.SetSnapshot(Historia[Current]);
-                this.LeveOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
+                this.LevelOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
             }
 
-        }
-        public void NextQuestion()
-        {
-            this.ZapiszStan();
         }
 
         public void ZapiszStan()
@@ -76,16 +73,14 @@ namespace Fiszki
                 Originator.SetSnapshot(Historia[Current]);
                 Current--;
             }
-            /*
-             * ogólnie działa ale nie wiem jak dodać przycisk żeby cofać
-             * i jak potem zmienić żeby dało się zmieniać odpowiedzi
-             * i żeby znowu pojawiał się przycisk dalej
-             */
-            this.LeveOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
+
+
+            któreQuestion--;
+            this.LevelOfDifficulty.play(main, tabWords, Current);
         }
 
     }
-    class Snapshot
+    public class Snapshot
     {
         public Answer Odp { get; }
         public Snapshot(Answer Odpowiedzi)
@@ -94,7 +89,7 @@ namespace Fiszki
         }
     }
 
-    class Pytanie
+    class Question
     {
         public Answer Odp { get; set; }
         public Snapshot CreateSnapshot(Answer Odpowiedzi)

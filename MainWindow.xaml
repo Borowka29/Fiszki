@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fiszki"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="400">
+        Title="MainWindow" Height="300" Width="450">
 
     
     <Grid Name="mainGrid" >
 
-        <Grid Name="Login" >
+        <Grid Name="Login" Visibility="Hidden">
             <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
 
                 <Label Margin="0, 2,0,2">Login:</Label>
@@ -264,7 +264,7 @@
         </Grid>
 
 
-        <Grid Name="gameHard" x:FieldModifier="public" Visibility="Hidden">
+        <Grid Name="gameHard" x:FieldModifier="public" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition/>
@@ -276,12 +276,10 @@
             <Label Name="questionHard" x:FieldModifier="public" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">xxx</Label>
             <Grid Grid.Row="2" Name="gameHardInside">
                 <TextBox Name="answerHard" x:FieldModifier="public" Width="250" Height="30" Margin="10" HorizontalAlignment="Left"></TextBox>
-                <Button Name="nextHard" x:FieldModifier="public" Width="70" Height="20" HorizontalAlignment="Right" Margin="10"
-                        Visibility="Visible">Sprawdź</Button>
+                <Button Name="nextHard" x:FieldModifier="public" Width="70" Height="20" HorizontalAlignment="Right" Margin="10,10,100,10"
+                        Visibility="Visible" Click="NextButton_Click">Sprawdź</Button>
                 <Button Name="playHardNextButton" x:FieldModifier="public" Width="70" Height="20" HorizontalAlignment="Right" Margin="10"
                         Visibility="Hidden" Click="NextButton_Click">Dalej</Button>
-                <Label Name="correctAnswerHard" x:FieldModifier="public" Width="70" Height="30" HorizontalAlignment="Right" Margin="10"
-                       Visibility="Hidden">XXX</Label>
             </Grid>
             <Button Name="playHardBackButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
                     Margin="10" Click="BackButton_Click">Wroć</Button>
@@ -292,13 +290,38 @@
 
         <Grid Name="gameOver" Visibility="Hidden">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center">Twój wynik to:</Label>
-            <Label Name="score" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">00/15</Label>
+            <ListView Grid.Row="1" Name="TestAnwers" IsEnabled="False" Height="auto">
+                <ListView.View>
+                    <GridView >
+                        <GridView.Columns>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Odp.Question}" Width="100">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader>
+                                        Słówko
+                                    </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Odp.CorrectAnswer}" Width="100">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader>
+                                        Prawidłowa odpowiedź
+                                    </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
             <Button Grid.Row="2" Height="20" Width="70" HorizontalAlignment="Center" Margin="5" Click="BackButton_Click">Wroć</Button>
+        </Grid>
+        <Grid Name="learningOver" Visibility="Hidden">
+            <Label FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center">Gratulacje!</Label>
+            <Button Width="70" Height="25" Margin="20" VerticalAlignment="Bottom" Click="BackButton_Click">wróć</Button>
         </Grid>
     </Grid>
 </Window>

@@ -25,6 +25,7 @@ namespace Fiszki
         public abstract void check(string answer, MainWindow main);
         public abstract Answer GetQuestion();
         public abstract void ShowQuestion(MainWindow main, Answer ans, int ktorePytanie);
+        public abstract void next(MainWindow main);
     }
 
 }
