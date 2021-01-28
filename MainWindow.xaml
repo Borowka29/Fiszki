@@ -316,7 +316,7 @@
                             <GridViewColumn DisplayMemberBinding="{Binding Path=Odp.UserAnswer}" Width="100">
                                 <GridViewColumn.Header>
                                     <GridViewColumnHeader>
-                                        Prawidłowa odpowiedź
+                                        Twoja odpowiedź
                                     </GridViewColumnHeader>
                                 </GridViewColumn.Header>
                             </GridViewColumn>

@@ -31,7 +31,7 @@ namespace Fiszki
         public void DrowACard(MainWindow main)
         {
             LevelOfDifficulty.next(main);
-            main.previousQuestionEasy.Visibility = Visibility.Hidden;
+            
             if (którePytanie < tabWords.Length)
             {
                 this.LevelOfDifficulty.play(main, tabWords,którePytanie);
@@ -42,7 +42,7 @@ namespace Fiszki
 
                 main.learningOver.Visibility = Visibility.Visible;
                 main.gameMedium.Visibility = Visibility.Hidden;
-            }
+            }main.previousQuestionMedium.Visibility = Visibility.Hidden;
 
         }
         public void check(string answer, MainWindow main)

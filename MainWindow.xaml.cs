@@ -187,13 +187,6 @@ namespace Fiszki
                     else 
                         testMode.setStrategia(new Medium(), Baza.getListWord());
                     break;
-
-                case 2: // hard
-                    if (tryb == 1) 
-                        learningMode.setStrategia(new Hard(), Baza.getListWord());
-                    else 
-                        testMode.setStrategia(new Hard(), Baza.getListWord());
-                    break;
             }
 
             start.Visibility = Visibility.Hidden; // schowanie gridu Start
