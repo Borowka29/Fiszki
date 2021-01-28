@@ -16,7 +16,7 @@ namespace Fiszki.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LevelHard = table.Column<double>(type: "float", nullable: false),
                     Color = table.Column<int>(type: "int", nullable: false),
-                    IsBold = table.Column<bool>(type: "bit", nullable: false)
+                    isPolishTranslation = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

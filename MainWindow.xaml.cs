@@ -41,9 +41,9 @@ namespace Fiszki
         public int tryb; //1- nauka, 2-test
 
         public bool translationFromPolish;  // true - tlumaczy pl->ang;      false - tlumaczy ang->pl
-
+        private int i;
         public MainWindow()
-        {
+        {i = 1;
             InitializeComponent();
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             colorSetter.ItemsSource = colorList;
@@ -52,6 +52,7 @@ namespace Fiszki
             testMode = new TestMode();
 
             Baza = Baza.GetInstance();
+            
             Refresh();
         }
 
@@ -147,7 +148,7 @@ namespace Fiszki
 
         private void quitButton_Click(object sender, RoutedEventArgs e) // wyjscie z aplikacji
         {
-            Baza.updateDataUser(User.Id, difficult, color); // update bazy, zeby po ponownym otwarciu przywrocilo obecne ustawienia
+            Baza.updateDataUser(User.Id, difficult, color, translationFromPolish); // update bazy, zeby po ponownym otwarciu przywrocilo obecne ustawienia
             Close();
         }
 
@@ -292,7 +293,15 @@ namespace Fiszki
                     color = User.Color;
                     userLogin.Text = "";
                     userPassword.Password = "";
-
+                    translationFromPolish = User.isPolishTranslation;
+                    if(translationFromPolish==true)
+                    {
+                        polang.IsChecked = true;
+                    }
+                    else
+                    {
+                        angpol.IsChecked = true;
+                    }
                     colorSetter.SelectedItem = colorList[color];
                     difficultSetter.Value = difficult;
                     colorChange();
@@ -348,13 +357,12 @@ namespace Fiszki
 
         private void Btn1_Checked(object sender, RoutedEventArgs e) // zmiana kierunku tlumaczenia pl-ang
         {
-            int i = 1;
-            if (i != 1)
+            if (this.i != 1)
             {
                 if (angpol.IsChecked == true) translationFromPolish = false;
                 else translationFromPolish = true;
             }
-            i = 2;
+            this.i = 2;
 
         }
 

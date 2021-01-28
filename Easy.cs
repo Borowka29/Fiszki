@@ -90,8 +90,8 @@ namespace Fiszki
             indexy = new int[2];
             do
             {
-                indexy[0] = this.rand.Next(0, 12);
-                indexy[1] = this.rand.Next(0, 12);
+                indexy[0] = this.rand.Next(0, 11);
+                indexy[1] = this.rand.Next(0, 11);
 
             } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore);
         }

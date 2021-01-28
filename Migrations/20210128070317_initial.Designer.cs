@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fiszki.Migrations
 {
     [DbContext(typeof(WordListContext))]
-    [Migration("20210125202316_initial")]
+    [Migration("20210128070317_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,9 +30,6 @@ namespace Fiszki.Migrations
                     b.Property<int>("Color")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsBold")
-                        .HasColumnType("bit");
-
                     b.Property<double>("LevelHard")
                         .HasColumnType("float");
 
@@ -41,6 +38,9 @@ namespace Fiszki.Migrations
 
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isPolishTranslation")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

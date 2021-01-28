@@ -77,11 +77,12 @@ namespace Fiszki
             return false;
             
         }
-        public static void updateDataUser(int id, double difficult, int color)
+        public static void updateDataUser(int id, double difficult, int color,bool isPolishTranslation)
         {
             Account User = db.Account.Where(z => z.Id == id).FirstOrDefault();
             User.LevelHard = difficult;
             User.Color = color;
+            User.isPolishTranslation = isPolishTranslation;
             db.Attach(User).State = EntityState.Modified;
             db.SaveChanges();
         }

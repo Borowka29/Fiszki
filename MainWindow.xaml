@@ -78,7 +78,7 @@
             <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
                 <Label>Zmień tłumaczenie języka z:</Label>
                 <WrapPanel Grid.Row="1">
-                    <RadioButton Name = "polang"  Margin = "10,5,0,0" Checked = "Btn1_Checked" IsChecked="True">polskiego na angielski</RadioButton>
+                    <RadioButton Name = "polang"  Margin = "10,5,0,0" Checked = "Btn1_Checked" >polskiego na angielski</RadioButton>
                     <RadioButton Name = "angpol"  Margin = "10,5,0,0" Checked = "Btn1_Checked" >angielskiego na polski</RadioButton>
                 </WrapPanel>
             </StackPanel>

@@ -33,9 +33,8 @@ namespace Fiszki
             LevelOfDifficulty.next(main);
             if (którePytanie < tabWords.Length)
             {
-                którePytanie++;
-
                 this.LevelOfDifficulty.play(main, tabWords,którePytanie);
+                którePytanie++;
             }
             else
             {
