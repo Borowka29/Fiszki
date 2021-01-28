@@ -22,27 +22,30 @@ namespace Fiszki
         public string question;
         public string correctAnswer;
         private string userAnswer;
-        public string[] wrongAnswer = new string[2];
+        public string[] wrongAnswer;
         public int ktore { get; set; }
         private int[] indexy;
         private Random rand { get; set; } = new Random();
         public int correctIndex;
-
+        public Easy()
+        {
+            wrongAnswer = new string[2];
+        }
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie) // inicjalizacja widoku gry, podpiecie zmiennych pod widok
         {
 
             main.gameEasy.Visibility = Visibility.Visible;              //| widok Gry
             main.playEasyNextButton.Visibility = Visibility.Hidden;     //| przycisk "Dalej" - jeszcze niewidoczny, bo nic nie zaznaczylismy
-            main.previousQuestionEasy.Visibility = Visibility.Hidden;   //| przycisk "Cofnij" - jeszcze niewidoczny, bo nie przeszlismy dalej
 
             ktore = ktorePytanie;
 
-            losuj();
+            losuj(tabWords.Length);
 
             if (main.translationFromPolish == true) // przypisanie slowek do pól
             {
                 this.question = tabWords[ktore].PolishVersion;
                 this.correctAnswer = tabWords[ktore].EnglishVersion;
+                wrongAnswer = new string[2];
                 this.wrongAnswer[0] = tabWords[indexy[0]].EnglishVersion;
                 this.wrongAnswer[1] = tabWords[indexy[1]].EnglishVersion;
             }
@@ -80,18 +83,20 @@ namespace Fiszki
                 main.answerEasy2.Content = wrongAnswer[1];
             }
 
+            main.answerEasy1.Background = Brushes.White;
+            main.answerEasy2.Background = Brushes.White;
+            main.answerEasy3.Background = Brushes.White;
 
-
-            point = false; // poki co poprawne tlumaczenie nie zostalo zaznaczone
+                point = false; // poki co poprawne tlumaczenie nie zostalo zaznaczone
         }
 
-        public void losuj() // losowanie blednych odpowiedzi
+        public void losuj(int sizeOfTab) // losowanie blednych odpowiedzi
         {
             indexy = new int[2];
             do
             {
-                indexy[0] = this.rand.Next(0, 11);
-                indexy[1] = this.rand.Next(0, 11);
+                indexy[0] = this.rand.Next(0, sizeOfTab);
+                indexy[1] = this.rand.Next(0, sizeOfTab);
 
             } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore);
         }
@@ -127,8 +132,8 @@ namespace Fiszki
             {
                 main.playEasyNextButton.Visibility = Visibility.Visible; // odpowiedz zaznaczona, wiec mozna przejsc dalej: przycisk "Dalej" widoczny
                 
-                if(ktore > 0) // jestesmy juz po pierwszym pytaniu wiec...
-                    main.previousQuestionEasy.Visibility = Visibility.Visible; // ...mozna cofnac, wiec przycisk "Cofnij" widoczny
+                //if(ktore > 0) // jestesmy juz po pierwszym pytaniu wiec...
+                //    main.previousQuestionEasy.Visibility = Visibility.Visible; // ...mozna cofnac, wiec przycisk "Cofnij" widoczny
 
                 if (ktore == 9) // to ostatnie pytanie, nastepne bedzie przejscie do gridu gameOver
                 {
@@ -168,7 +173,9 @@ namespace Fiszki
 
             this.question = ans.Question;
             this.correctAnswer = ans.CorrectAnswer;
-
+            this.wrongAnswer = new string[2];
+            this.wrongAnswer[0] = ans.AdditionalAnswers[0];
+            this.wrongAnswer[1] = ans.AdditionalAnswers[1];
             main.questionEasy.Content = question;
 
             correctIndex = ans.correctIndex;
@@ -198,12 +205,12 @@ namespace Fiszki
             main.answerEasy1.Background = Brushes.White;
             main.answerEasy2.Background = Brushes.White;
             main.answerEasy3.Background = Brushes.White;
-            if (ans.UserAnswer == "e1")
-                main.answerEasy1.Background = Brushes.Blue;
-            else if (ans.UserAnswer == "e2")
-                main.answerEasy2.Background = Brushes.Blue;
-            else if (ans.UserAnswer == "e3")
-                main.answerEasy3.Background = Brushes.Blue;
+            if (ans.UserAnswer == main.answerEasy1.Content.ToString())
+                main.answerEasy1.Background = Brushes.Azure;
+            else if (ans.UserAnswer == main.answerEasy2.Content.ToString())
+                main.answerEasy2.Background = Brushes.Azure;
+            else if (ans.UserAnswer == main.answerEasy3.Content.ToString())
+                main.answerEasy3.Background = Brushes.Azure;
 
             point = false;
         }

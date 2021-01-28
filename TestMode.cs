@@ -1,6 +1,7 @@
 ﻿using Fiszki.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 
@@ -10,10 +11,10 @@ namespace Fiszki
     {
         public bool end = false;
 
-        private Answer Odp;
-        public List<Snapshot> Historia { get; } = new List<Snapshot>();
-        private Question Originator = new Question(); //aktualne Question
-        private int Current = -1;
+        public Answer Odp;
+        public List<Snapshot> Historia;
+        private Question Originator; //aktualne Question
+        private int Current;
         private Strategia LevelOfDifficulty;
         private Word[] tabWords { get; set; }
         private Random rand { get; set; }
@@ -21,6 +22,9 @@ namespace Fiszki
 
         public void setStrategia(Strategia strategia, List<Word> words)
         {
+            Current = -1;
+            Historia = new List<Snapshot>();
+            Originator = new Question();
             rand = new Random();
             int ile = rand.Next(1, 2);
             int k = ile;
@@ -38,45 +42,62 @@ namespace Fiszki
         public void DrowACard(MainWindow main)
         {
             LevelOfDifficulty.next(main);
-            this.LevelOfDifficulty.play(main, tabWords, któreQuestion);
-            któreQuestion++;
+            if (Current >= 0) // jestesmy juz po pierwszym pytaniu wiec...
+                            main.previousQuestionEasy.Visibility = Visibility.Visible;
+             else
+                            main.previousQuestionEasy.Visibility = Visibility.Hidden;
+            
+            if (Current==Historia.Count-1)
+            {
+                if (!end)
+                    this.LevelOfDifficulty.play(main, tabWords, któreQuestion++);
+
+            }
+            else
+            {
+                //Current++;
+                Originator.SetSnapshot(Historia[Current]);
+                this.LevelOfDifficulty.ShowQuestion(main, Originator.Odp, Current+1);
+            }
+            
         }
         public void check(string answer, MainWindow main)
         {
-            if(Current == Historia.Count-1)//losuje Question
-            {
-                this.LevelOfDifficulty.check(answer, main);
-                end = LevelOfDifficulty.end;
-                Odp = this.LevelOfDifficulty.GetQuestion();
-              //  this.ZapiszStan();
-
-            }
-            else//przechodzi do pytania po cofaniu się
-            {
-                Current++;
-                Originator.SetSnapshot(Historia[Current]);
-                this.LevelOfDifficulty.ShowQuestion(main, Originator.Odp, Current);
-            }
+            this.LevelOfDifficulty.check(answer, main);
+            end = LevelOfDifficulty.end;
+            Odp = this.LevelOfDifficulty.GetQuestion();
 
         }
 
         public void ZapiszStan()
         {
-            Historia.Add(Originator.CreateSnapshot(Odp));
+            var question = Historia.FirstOrDefault(x => x.Odp?.Question == Odp.Question);
+            if(question == null)
+            {
+                Historia.Add(Originator.CreateSnapshot(Odp));
+            }
+            else
+            {
+                var index = Historia.FindIndex(x => x.Odp.Question == Odp.Question);
+                Historia[index] = Originator.CreateSnapshot(Odp);
+            }
             Current++;
         }
 
         public void Cofnij(MainWindow main)
         {
-            if (Current > 0)
+
+            if (Current >= 0)
             {
                 Originator.SetSnapshot(Historia[Current]);
                 Current--;
+                if (Current >= 0) 
+                    main.previousQuestionEasy.Visibility = Visibility.Visible;
+                else
+                    main.previousQuestionEasy.Visibility = Visibility.Hidden;
+                this.LevelOfDifficulty.ShowQuestion(main, Originator.Odp, któreQuestion);
+                
             }
-
-
-            któreQuestion--;
-            this.LevelOfDifficulty.play(main, tabWords, Current);
         }
 
     }

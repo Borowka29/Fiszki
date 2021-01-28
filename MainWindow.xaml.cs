@@ -202,11 +202,11 @@ namespace Fiszki
             else
                 testMode.DrowACard(this);     // wlaczenie gridu i odpalenie Testu
         }
-
+        private string senderString;
         private void answer_Click(object sender, RoutedEventArgs e) // klikniecie ktorejs odpowiedzi lub "sprawdz" w trybie hard
         {
             
-                string senderString = null;
+                senderString = null;
 
                 if (sender == answerEasy1) // zmiana sendera (klasa: object) na string [bo jak wysle sender do funkcji, to w funckji juz
                     senderString = "e1";   //                      nie wie, ze to klasa button, czyli klasa dziedziczaca z klasy object]
@@ -234,6 +234,22 @@ namespace Fiszki
 
         private void NextButton_Click(object sender, RoutedEventArgs e) // klikniecie przycisku "dalej" w Nauce/Tescie
         {
+            if (tryb == 1 && sender != nextHard)
+            {
+                learningMode.DrowACard(this);
+
+            }
+            if (tryb == 2 && sender != nextHard)
+            {
+                testMode.ZapiszStan();
+                testMode.DrowACard(this);
+            }
+            if(tryb==2&& sender == nextHard)
+            {
+                testMode.ZapiszStan();
+                testMode.DrowACard(this);
+
+            }
             if (testMode.end)   // koniec testu
             {
                 gameEasy.Visibility = Visibility.Hidden; // niezaleznie od poziomu zamykamy Test
@@ -247,16 +263,7 @@ namespace Fiszki
                 return;
             }
 
-            if (tryb==1 && sender!=nextHard)
-            {
-                learningMode.DrowACard(this);
 
-            }
-            if (tryb == 2 && sender!=nextHard)
-            {
-                testMode.ZapiszStan();
-                testMode.DrowACard(this); 
-            }
         }
 
         private void Previous_Click(object sender, RoutedEventArgs e) // cofanie (pamiatka) w tescie

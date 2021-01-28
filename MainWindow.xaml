@@ -227,7 +227,7 @@
             <Button Name="playEasyNextButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right"
                     Margin="5,5,90,5" Click="NextButton_Click" Visibility="Hidden">Dalej</Button>
             <Button Name="previousQuestionEasy" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
-                    Margin="10,10,100,10" Click="Previous_Click">Poprzednie</Button>
+                    Margin="10,10,180,10" Click="Previous_Click">Poprzednie</Button>
         </Grid>
 
 
@@ -284,7 +284,7 @@
             <Button Name="playHardBackButton" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
                     Margin="10" Click="BackButton_Click">Wroć</Button>
             <Button Name="previousQuestionHard" x:FieldModifier="public" Grid.Row="3" Height="20" Width="70" HorizontalAlignment="Right" 
-                    Margin="10,10,100,10" Click="Previous_Click" Visibility="Hidden">Poprzednie</Button>
+                    Margin="10,10,180,10" Click="Previous_Click" Visibility="Hidden">Poprzednie</Button>
 
         </Grid>
 

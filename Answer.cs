@@ -13,13 +13,13 @@ namespace Fiszki
         public string[] AdditionalAnswers { get; set; }
         public string UserAnswer { get; set; }
         public int correctIndex { get; set; }
-        public Answer(string q, string a, string[] ans, string user, int correctIndex)
+        public Answer(string q, string a, string[] wrongAnswer, string user, int correctIndex)
         {
             this.Question = q;
             this.CorrectAnswer = a;
-            this.AdditionalAnswers = ans;
             this.UserAnswer = user;
             this.correctIndex = correctIndex;
+            this.AdditionalAnswers = wrongAnswer;
         }
 
         //public void AddAdditionalAnswer(string Ans)

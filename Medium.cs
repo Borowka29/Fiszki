@@ -22,21 +22,31 @@ namespace Fiszki
         public string question;
         public string correctAnswer;
         private string userAnswer;
-        public string[] wrongAnswer = new string[3];
+        public string[] wrongAnswer;
         public int ktore { get; set; }
         private int[] indexy;
         private Random rand { get; set; } = new Random();
         public int correctIndex;
-
+        public Medium()
+        {
+            wrongAnswer = new string[3];
+        }
         override public void play(MainWindow main, Word[] tabWords, int ktorePytanie)
         {
             main.gameMedium.Visibility = Visibility.Visible;
             main.playMediumNextButton.Visibility = Visibility.Hidden;
-            main.previousQuestionMedium.Visibility = Visibility.Hidden;
+            if(ktorePytanie>0)
+            {
+                main.previousQuestionMedium.Visibility = Visibility.Visible ;
+            } else
+            {
+                main.previousQuestionMedium.Visibility = Visibility.Hidden;
 
+            }
+            wrongAnswer = new string[3];
             ktore = ktorePytanie;
             showNumber(main);
-            losuj();
+            losuj(tabWords.Length);
             if (main.translationFromPolish == true)
             {
                 this.question = tabWords[ktore].PolishVersion;
@@ -95,20 +105,21 @@ namespace Fiszki
                 main.answerMedium3.Content = wrongAnswer[2];
             }
 
+
             point = false;
         }
-        public void losuj()
+        public void losuj(int sizeOfTab)
         {
             indexy = new int[3];
             do
             {
-                indexy[0] = this.rand.Next(0, 4);
-                indexy[1] = this.rand.Next(0, 4);
-                indexy[2] = this.rand.Next(0, 4);
-            } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore|| indexy[2]== indexy[1]|| indexy[2]== indexy[0]|| 
-                     indexy[2]==ktore);
+                indexy[0] = this.rand.Next(0, sizeOfTab);
+                indexy[1] = this.rand.Next(0, sizeOfTab);
+                indexy[2] = this.rand.Next(0, sizeOfTab);
+            } while (indexy[0] == ktore || indexy[0] == indexy[1] || indexy[1] == ktore || indexy[2] == indexy[1] || indexy[2] == indexy[0] ||
+                     indexy[2] == ktore);
         }
-        
+
         public override void check(string answer, MainWindow main)
         {
 
@@ -196,10 +207,12 @@ namespace Fiszki
         override public void ShowQuestion(MainWindow main, Answer ans, int ktorePytanie)
         {
             //ktore = ktorePytanie;
-
+            wrongAnswer = new string[3];
             this.question = ans.Question;
             this.correctAnswer = ans.CorrectAnswer;
-
+            this.wrongAnswer[0] = ans.AdditionalAnswers[0];
+                this.wrongAnswer[1] = ans.AdditionalAnswers[1];
+            this.wrongAnswer[2] = ans.AdditionalAnswers[2];
             main.gameMedium.Visibility = Visibility.Visible;
             main.playMediumNextButton.Visibility = Visibility.Hidden;
             main.colorChange();
